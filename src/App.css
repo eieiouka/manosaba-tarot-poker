@@ -523,3 +523,31 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
   width:min(calc((100vw - 24px)*.285 - 5px),calc(23vw + max(0px,(100dvh - 680px)*.20)))!important;
  }
 }
+
+/* Framed hand-strength display, matching the casino status panels. */
+.hand-rank{
+ box-sizing:border-box;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ width:100%;
+ min-height:43px;
+ padding:8px 13px;
+ border:1px solid #b69765;
+ border-radius:9px;
+ background:linear-gradient(180deg,#28222c,#191820);
+ box-shadow:inset 0 1px 0 #e1c18b28,0 5px 14px #0004;
+ color:#f4d89a;
+ font-size:18px;
+ font-weight:700;
+ letter-spacing:.1em;
+ text-align:center;
+}
+.desktop-rank{margin:0 0 8px}
+.mobile-casino .hand-rank.mobile-rank{
+ width:calc(100% - 6px)!important;
+ min-height:37px!important;
+ margin:0 0 7px 0!important;
+ padding:6px 8px!important;
+ font-size:clamp(13px,3.7vw,18px)!important;
+}
