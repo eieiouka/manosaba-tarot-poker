@@ -42,14 +42,18 @@ export default function App() {
     window.addEventListener('resize', update)
     return () => window.removeEventListener('resize', update)
   }, [])
-  const fit = Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
+  const mobile = viewport.width <= 650
+  const fit = mobile ? 1 : Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
   const [cards, setCards] = useState(deal)
   const hannaChips = STARTING_CHIPS
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
-  function newDeal() { setCards(deal()) }
+  const [betMultiplier, setBetMultiplier] = useState(2)
+  const [callNotice, setCallNotice] = useState(false)
+  const callAmount = 1260
+  function handleCall() { setCallNotice(true) }
   return (
-    <main className="casino" style={{ width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
+    <main className={`casino ${mobile ? "mobile-casino" : ""}`} style={mobile ? { width: viewport.width, minHeight: viewport.height, height: "auto", transform: "translateX(-50%)" } : { width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
       <header className="topbar">
         <div className="brand"><span className="brand-icon">✦</span><span>MANOSABA <strong>TAROT POKER</strong></span></div>
         <span className="prototype-label">UI PROTOTYPE</span>
@@ -84,7 +88,11 @@ export default function App() {
             <div className="chip-display"><span>CHIPS</span><strong>1,000</strong></div>
           </div>
           <div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div>
-          <button className="deal-button" onClick={newDeal}>配り直す <span>↻</span></button>
+          <div className="bet-controls">
+            <div className="bet-multipliers">{[2, 3, 4, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => { setBetMultiplier(value); setCallNotice(false) }}>{value === 'all' ? 'オールイン' : value + '倍'}</button>)}</div>
+            <button type="button" className="call-button" onClick={handleCall}><strong>コール</strong><span>{callAmount.toLocaleString()}</span></button>
+            {callNotice && <span className="bet-notice">ベット処理は今後実装します</span>}
+          </div>
         </section>
       </div>
     </main>
