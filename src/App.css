@@ -454,3 +454,72 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  .mobile-casino .player-hand .card-slot,
  .mobile-casino .player-hand .card-slot img{width:min(20vw,calc((100vw - 24px)*.23))!important}
 }
+
+/* Hand rank and compact betting panel. */
+.player-hand-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto}
+.player-hand-wrap .player-hand{margin:0!important}
+.hand-rank{font-weight:700;letter-spacing:.08em;color:#f3d492;text-align:center;text-shadow:0 1px 5px #0009}
+.desktop-rank{font-size:17px;margin-bottom:3px}
+.mobile-rank{display:none}
+.bet-controls{width:210px;flex-basis:210px}
+.bet-multipliers{width:100%;gap:5px}
+.bet-multipliers button,.bet-multipliers button:last-child{min-width:0;flex:1 1 0;padding:0 5px;font-size:13px}
+.call-button{width:100%}
+@media(min-width:651px){
+ .player-zone{gap:15px!important}
+ .player-hand-wrap .player-hand{gap:18px!important}
+ .bet-controls{width:210px!important;flex-basis:210px!important}
+}
+.mobile-casino .player-zone{
+ grid-template-columns:minmax(0,59%) minmax(0,41%)!important;
+ column-gap:4px!important;
+}
+.mobile-casino .player-hand-wrap{
+ grid-area:hand!important;
+ align-self:end!important;
+ justify-self:start!important;
+ width:100%!important;
+ min-width:0!important;
+ align-items:flex-start!important;
+}
+.mobile-casino .player-hand-wrap .player-hand{
+ grid-area:auto!important;
+ width:100%!important;
+ justify-content:flex-start!important;
+ gap:clamp(3px,1vw,7px)!important;
+}
+.mobile-casino .player-hand-wrap .card-slot,
+.mobile-casino .player-hand-wrap .card-slot img{
+ width:min(calc((100vw - 24px)*.285 - 5px),calc(23vw + max(0px,(100dvh - 680px)*.20)))!important;
+ max-width:128px!important;
+}
+.mobile-casino .hand-rank.mobile-rank{
+ display:block!important;
+ font-size:clamp(13px,3.7vw,19px)!important;
+ margin:0 0 6px 3px!important;
+}
+.mobile-casino .desktop-rank{display:none!important}
+.mobile-casino .bet-controls{
+ width:100%!important;
+ min-width:0!important;
+ gap:5px!important;
+}
+.mobile-casino .bet-multipliers{width:100%!important;gap:3px!important}
+.mobile-casino .bet-multipliers button,
+.mobile-casino .bet-multipliers button:last-child{
+ min-width:0!important;
+ width:0!important;
+ flex:1 1 0!important;
+ padding:0!important;
+ height:30px!important;
+ font-size:clamp(10px,2.8vw,13px)!important;
+}
+.mobile-casino .call-button{width:100%!important;min-height:61px!important}
+.mobile-casino .player-info.opponent-info{width:100%!important}
+@media(max-width:360px){
+ .mobile-casino .player-zone{grid-template-columns:minmax(0,59%) minmax(0,41%)!important}
+ .mobile-casino .player-hand-wrap .card-slot,
+ .mobile-casino .player-hand-wrap .card-slot img{
+  width:min(calc((100vw - 24px)*.285 - 5px),calc(23vw + max(0px,(100dvh - 680px)*.20)))!important;
+ }
+}
