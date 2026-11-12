@@ -116,3 +116,45 @@
 .card-number{width:21px;height:21px;font-size:11px;top:3px;left:3px}
 .card-number.number-bottom-right{bottom:18px;right:3px}
 }
+
+/* Fluid layout: all widths interpolate smoothly, no breakpoint-driven jumps. */
+.casino{--scale:clamp(.72,calc(.65 + 100vw / 1800px),1.12)}
+.topbar{height:clamp(38px,4vw,48px);padding-inline:clamp(10px,2vw,25px)}
+.game-area{width:100%;max-width:1040px;margin-inline:auto}
+.opponent-zone{height:clamp(120px,14vw,175px);gap:clamp(3px,1.2vw,15px);padding-inline:clamp(4px,1vw,12px);flex-wrap:nowrap}
+.hanna-portrait{width:clamp(100px,18vw,205px);height:clamp(116px,13.8vw,170px);flex:0 1 auto;min-width:0}
+.hanna-hand-side{width:clamp(86px,17vw,180px);min-width:0;flex:0 1 auto;gap:clamp(3px,.5vw,6px)}
+.side-cards{gap:clamp(3px,.7vw,10px)}
+.side-cards .card-slot,.side-cards .card-slot img{width:clamp(36px,5.8vw,72px)}
+.side-cards .card-slot img{height:auto;aspect-ratio:300/527}
+.opponent-info{width:clamp(105px,22vw,265px);flex:0 1 auto;padding:clamp(6px,1vw,13px)}
+.opponent-name strong{font-size:clamp(12px,1.5vw,19px)}
+.chip-display strong{font-size:clamp(14px,1.7vw,21px)}
+.table-area{height:clamp(190px,22vw,262px);perspective:clamp(650px,90vw,1100px)}
+.table-outer{height:clamp(213px,24vw,290px);top:clamp(-14px,-1vw,-8px)}
+.community-hand{top:clamp(7px,1vw,11px)}
+.community-hand .card-slot,.community-hand .card-slot img{width:clamp(75px,9vw,108px)}
+.community-hand .card-slot img{height:auto;aspect-ratio:300/527}
+.player-zone{max-width:570px;padding:clamp(3px,.5vw,8px) clamp(12px,2vw,20px) clamp(5px,1vw,12px)}
+.player-hand{gap:clamp(16px,2.4vw,30px);padding:clamp(5px,.7vw,9px) 0}
+.player-hand .card-slot,.player-hand .card-slot img{width:clamp(92px,9.5vw,116px)}
+.player-hand .card-slot img{height:auto;aspect-ratio:300/527}
+.card-number{width:clamp(42px,4.2vw,52px);height:clamp(42px,4.2vw,52px);font-size:clamp(21px,2.2vw,26px);border-width:3px;top:clamp(3px,.45vw,6px);left:clamp(3px,.45vw,6px)}
+.card-number.number-bottom-right{top:auto;left:auto;right:clamp(3px,.45vw,6px);bottom:clamp(17px,2vw,23px)}
+.card-orientation{font-size:clamp(9px,.9vw,11px)}
+@media(max-width:650px){
+ .opponent-zone{height:clamp(120px,14vw,175px);gap:clamp(3px,1.2vw,15px)}
+ .hanna-portrait{width:clamp(100px,18vw,205px);height:clamp(116px,13.8vw,170px)}
+ .hanna-hand-side{width:clamp(86px,17vw,180px);min-width:0}
+ .opponent-info{width:clamp(105px,22vw,265px);padding:clamp(6px,1vw,13px)}
+ .side-cards .card-slot,.side-cards .card-slot img{width:clamp(36px,5.8vw,72px)}
+ .side-cards .card-slot img{height:auto}
+ .table-area{height:clamp(190px,22vw,262px)}
+ .table-outer{height:clamp(213px,24vw,290px);top:clamp(-14px,-1vw,-8px)}
+ .community-hand .card-slot,.community-hand .card-slot img{width:clamp(75px,9vw,108px)}
+ .community-hand .card-slot img{height:auto}
+ .player-hand .card-slot,.player-hand .card-slot img{width:clamp(92px,9.5vw,116px)}
+ .player-hand .card-slot img{height:auto}
+ .card-number{width:clamp(42px,4.2vw,52px);height:clamp(42px,4.2vw,52px);font-size:clamp(21px,2.2vw,26px);top:clamp(3px,.45vw,6px);left:clamp(3px,.45vw,6px)}
+ .card-number.number-bottom-right{top:auto;left:auto;right:clamp(3px,.45vw,6px);bottom:clamp(17px,2vw,23px)}
+}
