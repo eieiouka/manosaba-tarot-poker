@@ -432,3 +432,25 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 }
 .mobile-casino .table-area{margin-top:64px!important}
 @media(max-width:360px){.mobile-casino .table-area{margin-top:64px!important}}
+
+/* Taller phones gain larger player cards without changing the SE layout.
+   Width remains bounded by the left grid column to prevent overlap. */
+.mobile-casino .player-zone{
+ grid-template-columns:minmax(0,51%) minmax(0,49%)!important;
+ align-items:end!important;
+}
+.mobile-casino .player-hand{
+ align-self:end!important;
+ gap:clamp(3px,1vw,7px)!important;
+}
+.mobile-casino .player-hand .card-slot,
+.mobile-casino .player-hand .card-slot img{
+ width:min(calc((100vw - 24px)*.245 - 4px),calc(21vw + max(0px,(100dvh - 700px)*.14)))!important;
+}
+.mobile-casino .player-info.opponent-info{align-self:end!important}
+.mobile-casino .bet-controls{align-self:start!important}
+@media(max-width:360px){
+ .mobile-casino .player-zone{grid-template-columns:minmax(0,48%) minmax(0,52%)!important}
+ .mobile-casino .player-hand .card-slot,
+ .mobile-casino .player-hand .card-slot img{width:min(20vw,calc((100vw - 24px)*.23))!important}
+}
