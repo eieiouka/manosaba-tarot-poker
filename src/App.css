@@ -412,3 +412,8 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 @media(max-width:360px){
  .mobile-casino .table-area{margin-top:29px!important}
 }
+
+/* Mobile: lower table and Hanna's chips together, keeping a small gap. */
+.mobile-casino .opponent-zone>.opponent-info{bottom:-48px!important}
+.mobile-casino .table-area{margin-top:53px!important}
+@media(max-width:360px){.mobile-casino .table-area{margin-top:53px!important}}
