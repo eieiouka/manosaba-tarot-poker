@@ -56,7 +56,7 @@ export default function App() {
     <main className={`casino ${mobile ? "mobile-casino" : ""}`} style={mobile ? { width: viewport.width, minHeight: viewport.height, height: "auto", transform: "translateX(-50%)" } : { width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
       <header className="topbar">
         <div className="brand"><span className="brand-icon">✦</span><span>MANOSABA <strong>TAROT POKER</strong></span></div>
-        <span className="prototype-label">UI PROTOTYPE</span>
+        <button type="button" className="mobile-header-how-to" onClick={() => {}}>How to play</button>
       </header>
       <div className="game-area">
         <section className="opponent-zone" aria-label="対戦相手">
