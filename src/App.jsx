@@ -30,7 +30,8 @@ function Card({ card, hidden = false, facingOpponent = false }) {
   const description = hidden ? '裏向きのカード' : `${CARD_NAMES[card.id]}・${card.reversed ? '逆位置' : '正位置'}`
   return (
     <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''}`} title={description}>
-      <img src={src} alt={description} draggable="false" />
+      <img className={!hidden && card.reversed ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
+      {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""}`}>{card.id}</span>}
       {!hidden && <span className="card-orientation">{card.reversed ? '逆位置' : '正位置'}</span>}
     </div>
   )
