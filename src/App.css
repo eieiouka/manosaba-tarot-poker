@@ -42,3 +42,49 @@
 .player-hand .card-slot,.player-hand .card-slot img{width:74px}
 .player-hand .card-slot img{height:130px}
 }
+
+/* Tighter vertical composition */
+.topbar{height:45px}
+.opponent-zone{height:160px;gap:12px}
+.hanna-portrait{height:158px;width:180px}
+.opponent-info{width:210px;padding:10px 13px}
+.opponent-name strong{font-size:18px}
+.chip-display{border:0;margin:6px 0 0;padding:0}
+.chip-display strong{font-size:19px}
+.hanna-hand-side{gap:5px;min-width:170px}
+.side-cards .card-slot,.side-cards .card-slot img{width:62px}
+.side-cards .card-slot img{height:109px}
+.table-area{height:180px}
+.table-outer{height:205px;top:-14px}
+.community-hand{top:10px;gap:4px}
+.community-hand .card-slot,.community-hand .card-slot img{width:64px}
+.community-hand .card-slot img{height:112px}
+.table-pattern{top:37%;font-size:13px}
+.player-zone{padding:3px 18px 12px}
+.player-hand{padding:5px 0}
+.player-hand .card-slot,.player-hand .card-slot img{width:73px}
+.player-hand .card-slot img{height:128px}
+.player-footer{padding-top:6px}
+.demo-note{margin:7px 0 0}
+@media(max-width:650px){
+.topbar{height:40px}
+.opponent-zone{height:125px;gap:3px}
+.hanna-portrait{height:123px;width:35%}
+.hanna-hand-side{width:32%;min-width:0;gap:4px}
+.opponent-info{width:33%;padding:6px}
+.opponent-name strong{font-size:12px}
+.chip-display{margin-top:4px}
+.chip-display strong{font-size:14px}
+.side-cards .card-slot,.side-cards .card-slot img{width:34px}
+.side-cards .card-slot img{height:60px}
+.table-area{height:145px}
+.table-outer{height:165px;top:-9px}
+.community-hand{top:7px}
+.community-hand .card-slot,.community-hand .card-slot img{width:43px}
+.community-hand .card-slot img{height:76px}
+.table-pattern{font-size:9px}
+.player-zone{padding:3px 14px 10px}
+.player-hand .card-slot,.player-hand .card-slot img{width:65px}
+.player-hand .card-slot img{height:114px}
+.player-footer{padding-top:5px}
+}
