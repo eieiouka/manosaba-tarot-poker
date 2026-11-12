@@ -56,7 +56,7 @@ export default function App() {
             <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
             <div className="speech">「さあ、勝負しましょう。」</div>
-            <div className="chip-test"><span>表情テスト</span><button onClick={() => {setHannaChips(v => Math.max(0,v-250));setImageMissing(false)}}>−250</button><button onClick={() => {setHannaChips(v => v+250);setImageMissing(false}}>＋250</button><button onClick={() => {setHannaChips(STARTING_CHIPS);setImageMissing(false)}}>戻す</button></div>
+            <div className="chip-test"><span>表情テスト</span><button onClick={() => { setHannaChips(v => Math.max(0, v - 250)); setImageMissing(false) }}>−250</button><button onClick={() => { setHannaChips(v => v + 250); setImageMissing(false) }}>＋250</button><button onClick={() => { setHannaChips(STARTING_CHIPS); setImageMissing(false) }}>戻す</button></div>
           </div>
         </section>
         <section className="table-area" aria-label="カジノテーブル">
