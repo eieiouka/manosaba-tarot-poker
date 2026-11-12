@@ -1,1 +1,44 @@
 :root{font-family:"Yu Gothic",Meiryo,sans-serif;color:#f8eedb;background:#11121b;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-width:320px}button{font:inherit;cursor:pointer}.casino{min-height:100vh;background:radial-gradient(ellipse at 50% 24%,#333044 0%,#171720 55%,#101017 100%);overflow:hidden}.topbar{height:62px;padding:0 max(22px,calc((100vw - 1050px)/2));display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #b49a6638}.brand{display:flex;align-items:center;gap:11px;font:12px Georgia,serif;letter-spacing:.19em;color:#e8d9bd}.brand strong{color:#dcb77b;font-weight:normal}.brand-icon{font-size:27px;color:#d7b26e}.prototype-label{font:10px sans-serif;letter-spacing:.17em;color:#a99b84}.game-area{max-width:1040px;margin:auto}.opponent-zone{height:280px;display:flex;align-items:center;justify-content:center;gap:24px;position:relative;z-index:1}.hanna-portrait{width:250px;height:270px;display:flex;align-items:end;justify-content:center}.hanna-portrait img{height:100%;width:100%;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 10px 14px #0008)}.image-placeholder{width:220px;height:245px;border:1px dashed #92774d;border-radius:15px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#c7ac82;text-align:center;background:#2c2532}.image-placeholder small{font-size:11px;margin-top:12px}.opponent-info{width:345px;padding:14px 17px;border:1px solid #a68a5d88;border-radius:11px;background:#171720d9;box-shadow:0 14px 35px #0005}.opponent-name{font-size:11px;color:#b7a98d}.opponent-name strong{display:block;font-size:23px;color:#f6e8c9;margin-top:4px;letter-spacing:.12em}.chip-display{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #85725555;margin:10px 0 12px;padding-bottom:10px}.chip-display span{font:11px Georgia,serif;color:#d0b78a;letter-spacing:.18em}.chip-display strong{font:24px Georgia,serif;color:#e9cb83}.speech{font-size:13px;color:#e9dfcb;margin-bottom:13px}.chip-test{display:flex;align-items:center;gap:5px;flex-wrap:wrap}.chip-test span{font-size:10px;color:#a99b83;margin-right:3px}.chip-test button{font-size:11px;color:#e7d8bb;border:1px solid #756249;border-radius:5px;background:#383039;padding:5px 9px}.table-area{height:355px;position:relative;perspective:1100px;z-index:2}.table-outer{position:absolute;left:4%;width:92%;height:390px;top:-30px;padding:16px;border-radius:48% / 36%;background:linear-gradient(180deg,#b28c57 0%,#6b4529 65%,#2d1c17 100%);box-shadow:inset 0 4px 0 #e1c18b,0 21px 18px #000a,0 38px 25px #0007;transform:rotateX(25deg)}.table-felt{height:100%;width:100%;border-radius:48% / 36%;border:4px solid #d1ae70;background:radial-gradient(ellipse,#246953 0%,#124c3c 68%,#0b322c 100%);position:relative;overflow:hidden;box-shadow:inset 0 0 40px #031d1a}.table-pattern{position:absolute;top:47%;left:0;right:0;text-align:center;color:#d4b87b50;font:22px Georgia,serif;letter-spacing:.25em}.table-pattern span{margin:0 8px}.table-rule{position:absolute;top:50%;left:20%;width:60%;border-top:1px solid #e1c38a4b}.opponent-hand,.community-hand{position:absolute;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:7px}.opponent-hand{top:16px}.community-hand{bottom:16px}.felt-caption{font:10px Georgia,serif;letter-spacing:.2em;color:#e8d7a7}.card-row{display:flex;justify-content:center;gap:18px}.card-slot{width:75px;display:flex;flex-direction:column;align-items:center;position:relative}.card-slot img{width:75px;height:132px;object-fit:fill;border-radius:6px;box-shadow:2px 6px 8px #0008}.card-slot.facing-opponent img{transform:rotate(180deg)}.card-orientation{font-size:10px;margin-top:5px;color:#f0d9a3;white-space:nowrap}.player-zone{max-width:520px;margin:-5px auto 0;padding:14px 18px 24px;position:relative;z-index:3}.player-header{display:flex;justify-content:space-between;align-items:center;font:13px Georgia,serif;letter-spacing:.14em;color:#e8c98d}.player-header small{font:11px sans-serif;letter-spacing:0;color:#baa992;margin-left:7px}.always-upright{font:11px sans-serif;color:#b8d9bd;letter-spacing:0}.player-hand{display:flex;justify-content:center;gap:23px;padding:12px 0 15px}.player-hand .card-slot{width:96px}.player-hand .card-slot img{width:96px;height:169px;border-radius:7px}.player-hand .card-orientation{color:#c9b69b}.player-footer{border-top:1px solid #bba07150;padding-top:13px;display:flex;align-items:center;justify-content:space-between}.player-chips{font:11px Georgia,serif;letter-spacing:.13em;color:#cbb790}.player-chips strong{display:block;font-size:23px;color:#f3d894;letter-spacing:0;margin-top:5px}.deal-button{border:1px solid #d4b279;border-radius:6px;background:linear-gradient(#82623a,#4e3926);color:#f9e6c2;padding:12px 20px;font-size:13px}.deal-button span{margin-left:9px}.demo-note{font-size:11px;color:#8f8991;text-align:center;margin:13px 0 0}@media(max-width:650px){.topbar{height:50px;padding:0 12px}.brand{font-size:10px;letter-spacing:.07em;gap:5px}.brand-icon{font-size:19px}.prototype-label{font-size:8px}.opponent-zone{height:220px;gap:5px;padding:0 8px}.hanna-portrait{width:43%;height:215px}.image-placeholder{width:100%;height:180px;font-size:13px}.image-placeholder small{font-size:9px}.opponent-info{width:57%;padding:10px}.opponent-name strong{font-size:17px}.chip-display{margin:7px 0;padding-bottom:7px}.chip-display strong{font-size:19px}.speech{font-size:11px;margin-bottom:9px}.chip-test button{padding:5px 6px;font-size:10px}.chip-test span{width:100%}.table-area{height:255px;perspective:680px}.table-outer{width:112%;left:-6%;top:-14px;height:275px;padding:10px;transform:rotateX(25deg)}.table-felt{border-width:3px}.table-pattern{font-size:12px}.opponent-hand{top:9px}.community-hand{bottom:9px}.felt-caption{font-size:8px}.card-row{gap:10px}.card-slot,.card-slot img{width:49px}.card-slot img{height:86px;border-radius:4px}.card-orientation{font-size:8px;margin-top:2px}.player-zone{padding:8px 18px 22px}.player-hand{padding:10px 0}.player-hand .card-slot,.player-hand .card-slot img{width:82px}.player-hand .card-slot img{height:144px}.player-header{font-size:11px}.player-header small{font-size:10px}.deal-button{padding:10px 14px}.player-chips strong{font-size:20px}}
+/* Compact table: only two community cards; Hanna's hand sits beside her. */
+.opponent-zone{height:220px;gap:15px}
+.hanna-portrait{height:210px;width:205px}
+.opponent-info{width:285px}
+.hanna-hand-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:180px}
+.side-caption{font:10px Georgia,serif;letter-spacing:.15em;color:#d7bf91}
+.side-cards{display:flex;gap:10px}
+.side-cards .card-slot,.side-cards .card-slot img{width:72px}
+.side-cards .card-slot img{height:126px}
+.showdown-button{border:1px solid #9f8050;background:#3a3034;color:#f1dcaf;padding:6px 12px;border-radius:5px;font-size:11px}
+.table-area{height:225px}
+.table-outer{height:250px;top:-16px}
+.table-pattern{top:39%;font-size:16px}
+.community-hand{top:20px;bottom:auto}
+.community-hand .card-slot,.community-hand .card-slot img{width:72px}
+.community-hand .card-slot img{height:126px}
+.player-zone{margin:0 auto;padding-top:8px}
+.player-hand{padding:8px 0}
+.player-hand .card-slot img{height:150px;width:85px}
+.player-hand .card-slot{width:85px}
+@media(max-width:650px){
+.opponent-zone{height:175px;gap:4px;padding:0 5px}
+.hanna-portrait{height:165px;width:33%}
+.opponent-info{width:34%;padding:7px}
+.opponent-name strong{font-size:13px}
+.chip-display strong{font-size:15px}
+.speech{font-size:10px}
+.hanna-hand-side{width:33%;min-width:0;gap:5px}
+.side-caption{font-size:8px}
+.side-cards{gap:4px}
+.side-cards .card-slot,.side-cards .card-slot img{width:37px}
+.side-cards .card-slot img{height:65px}
+.side-cards .card-orientation{font-size:7px}
+.showdown-button{font-size:9px;padding:5px}
+.table-area{height:175px}
+.table-outer{height:193px;top:-8px}
+.table-pattern{font-size:10px}
+.community-hand{top:12px}
+.community-hand .card-slot,.community-hand .card-slot img{width:49px}
+.community-hand .card-slot img{height:86px}
+.player-hand .card-slot,.player-hand .card-slot img{width:74px}
+.player-hand .card-slot img{height:130px}
+}
