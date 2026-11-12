@@ -88,3 +88,31 @@
 .player-hand .card-slot img{height:114px}
 .player-footer{padding-top:5px}
 }
+
+/* Larger cards, with upright player-facing number badges */
+.card-slot{position:relative}
+.card-image-reversed{transform:rotate(180deg)}
+.card-number{position:absolute;z-index:2;top:5px;left:5px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#f9eac3;color:#231824;border:2px solid #38283d;box-shadow:0 1px 4px #0009;font:700 13px Georgia,serif;line-height:1;pointer-events:none}
+.card-number.number-bottom-right{top:auto;left:auto;bottom:21px;right:5px}
+.community-hand .card-slot,.community-hand .card-slot img{width:108px}
+.community-hand .card-slot img{height:190px}
+.table-area{height:258px}
+.table-outer{height:285px;top:-13px}
+.community-hand{top:8px}
+.table-pattern{top:39%}
+.player-hand .card-slot,.player-hand .card-slot img{width:116px}
+.player-hand .card-slot img{height:204px}
+.player-zone{max-width:570px}
+.player-hand{gap:30px}
+@media(max-width:650px){
+.community-hand .card-slot,.community-hand .card-slot img{width:76px}
+.community-hand .card-slot img{height:134px}
+.table-area{height:195px}
+.table-outer{height:218px;top:-8px}
+.community-hand{top:7px}
+.player-hand .card-slot,.player-hand .card-slot img{width:94px}
+.player-hand .card-slot img{height:165px}
+.player-hand{gap:18px}
+.card-number{width:21px;height:21px;font-size:11px;top:3px;left:3px}
+.card-number.number-bottom-right{bottom:18px;right:3px}
+}
