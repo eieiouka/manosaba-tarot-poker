@@ -79,9 +79,12 @@ export default function App() {
           </div>
         </section>
         <section className="player-zone">
-          <div className="player-header"><span>YOUR HAND <small>あなたの手札</small></span></div>
+          <div className="player-info opponent-info">
+            <div className="opponent-name">プレイヤー <strong>あなた</strong></div>
+            <div className="chip-display"><span>CHIPS</span><strong>1,000</strong></div>
+          </div>
           <div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div>
-          <div className="player-footer"><div className="player-chips">YOUR CHIPS <strong>1,000</strong></div><button className="deal-button" onClick={newDeal}>配り直す <span>↻</span></button></div>
+          <button className="deal-button" onClick={newDeal}>配り直す <span>↻</span></button>
         </section>
       </div>
     </main>
