@@ -573,3 +573,7 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
   margin-bottom:auto!important;
  }
 }
+
+/* Optical correction: table felt was visually below the midpoint.
+   Translate only the mobile table; keep its flex slot and player position. */
+.mobile-casino .table-area{transform:translateY(-34px)!important}
