@@ -382,3 +382,33 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  .mobile-casino .table-area{height:178px!important}
  .mobile-casino .player-hand .card-slot,.mobile-casino .player-hand .card-slot img{width:clamp(60px,20vw,76px)!important}
 }
+
+/* Four betting choices on both layouts. */
+.bet-multipliers button:last-child{min-width:72px}
+.mobile-casino .bet-multipliers button:last-child{flex:1.5 1 0!important}
+/* Mobile: reveal Hanna's face, lower table, and anchor hand/controls to bottom. */
+.mobile-casino .game-area{
+ display:flex!important;
+ flex-direction:column!important;
+ min-height:calc(100dvh - 48px)!important;
+}
+.mobile-casino .opponent-zone{
+ flex:0 0 auto!important;
+}
+.mobile-casino .opponent-zone>.opponent-info{
+ bottom:-26px!important;
+ left:4px!important;
+}
+.mobile-casino .table-area{
+ flex:0 0 auto!important;
+ margin-top:29px!important;
+}
+.mobile-casino .player-zone{
+ margin-top:auto!important;
+ flex:0 0 auto!important;
+ align-self:stretch!important;
+ padding-bottom:clamp(8px,2.5vw,16px)!important;
+}
+@media(max-width:360px){
+ .mobile-casino .table-area{margin-top:29px!important}
+}
