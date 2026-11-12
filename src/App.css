@@ -577,3 +577,12 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 /* Optical correction: table felt was visually below the midpoint.
    Translate only the mobile table; keep its flex slot and player position. */
 .mobile-casino .table-area{transform:translateY(-17px)!important}
+
+/* Quiet warm greige casino backdrop. Background only; layout untouched. */
+:root{background:#24212a}
+.casino{
+ background:
+  radial-gradient(ellipse 72% 55% at 50% 38%,rgba(129,112,113,.19) 0%,transparent 78%),
+  radial-gradient(ellipse 56% 45% at 10% 90%,rgba(122,99,84,.13) 0%,transparent 90%),
+  linear-gradient(145deg,#302c35 0%,#26242e 52%,#1c1c26 100%);
+}
