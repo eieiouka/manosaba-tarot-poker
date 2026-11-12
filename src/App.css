@@ -554,3 +554,22 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 
 /* The hand-rank panel above cards is mobile-only. */
 @media(min-width:651px){.hand-rank.mobile-rank{display:none!important}}
+
+/* Mobile: center the table vertically in the space between Hanna's
+   chip panel bottom and the player's hand-rank panel top. */
+.mobile-casino .opponent-zone{
+ margin-bottom:48px!important;
+}
+.mobile-casino .table-area{
+ margin-top:auto!important;
+ margin-bottom:auto!important;
+}
+.mobile-casino .player-zone{
+ margin-top:0!important;
+}
+@media(max-width:360px){
+ .mobile-casino .table-area{
+  margin-top:auto!important;
+  margin-bottom:auto!important;
+ }
+}
