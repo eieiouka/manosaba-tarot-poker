@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
@@ -37,13 +37,20 @@ function Card({ card, hidden = false, facingOpponent = false }) {
   )
 }
 export default function App() {
+  const [viewport, setViewport] = useState(() => ({ width: window.innerWidth, height: window.innerHeight }))
+  useEffect(() => {
+    const update = () => setViewport({ width: window.innerWidth, height: window.innerHeight })
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+  const fit = Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
   const [cards, setCards] = useState(deal)
   const hannaChips = STARTING_CHIPS
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
   function newDeal() { setCards(deal()) }
   return (
-    <main className="casino">
+    <main className="casino" style={{ width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
       <header className="topbar">
         <div className="brand"><span className="brand-icon">✦</span><span>MANOSABA <strong>TAROT POKER</strong></span></div>
         <span className="prototype-label">UI PROTOTYPE</span>
