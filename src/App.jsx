@@ -56,6 +56,7 @@ export default function App() {
       </header>
       <div className="game-area">
         <section className="opponent-zone" aria-label="対戦相手">
+          <button type="button" className="how-to-play" onClick={() => {}}>How to play</button>
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
