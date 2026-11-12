@@ -425,3 +425,10 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 /* Lower only the mobile table, preserving the player controls at the bottom. */
 .mobile-casino .table-area{margin-top:75px!important}
 @media(max-width:360px){.mobile-casino .table-area{margin-top:75px!important}}
+
+/* Fine-tune vertical positions without affecting card sizes. */
+@media(min-width:651px){
+ .player-zone{transform:translateY(24px)}
+}
+.mobile-casino .table-area{margin-top:64px!important}
+@media(max-width:360px){.mobile-casino .table-area{margin-top:64px!important}}
