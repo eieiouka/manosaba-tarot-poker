@@ -75,7 +75,6 @@ export default function App() {
           <div className="player-header"><span>YOUR HAND <small>あなたの手札</small></span></div>
           <div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div>
           <div className="player-footer"><div className="player-chips">YOUR CHIPS <strong>1,000</strong></div><button className="deal-button" onClick={newDeal}>配り直す <span>↻</span></button></div>
-          <p className="demo-note">画面確認用：ベット・役判定・対戦AIは未実装です。</p>
         </section>
       </div>
     </main>
