@@ -40,7 +40,8 @@ export default function App() {
   const [hannaChips, setHannaChips] = useState(STARTING_CHIPS)
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
-  function newDeal() { setCards(deal()) }
+  const [showdown, setShowdown] = useState(false)
+  function newDeal() { setCards(deal()); setShowdown(false) }
   return (
     <main className="casino">
       <header className="topbar">
@@ -52,6 +53,7 @@ export default function App() {
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
+          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!showdown} facingOpponent />)}</div><button className="showdown-button" onClick={() => setShowdown(v => !v)}>{showdown ? '伏せる' : 'ショウダウン'}</button></div>
           <div className="opponent-info">
             <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
@@ -63,11 +65,7 @@ export default function App() {
           <div className="table-outer">
             <div className="table-felt">
               <div className="table-pattern">✦ <span>TAROT POKER</span> ✦</div>
-              <div className="opponent-hand">
-                <div className="felt-caption">HANNA'S HAND</div>
-                <div className="card-row">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden facingOpponent />)}</div>
-              </div>
-              <div className="table-rule" />
+
               <div className="community-hand">
                 <div className="felt-caption">TABLE / 場札</div>
                 <div className="card-row">{cards.board.map((card, i) => <Card key={i} card={card} />)}</div>
