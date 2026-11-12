@@ -48,7 +48,7 @@ export default function App() {
   const hannaChips = STARTING_CHIPS
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
-  const [betMultiplier, setBetMultiplier] = useState(2)
+  const [betMultiplier, setBetMultiplier] = useState('call')
   const [callNotice, setCallNotice] = useState(false)
   const callAmount = 1260
   function handleCall() { setCallNotice(true) }
@@ -89,7 +89,7 @@ export default function App() {
           </div>
           <div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div>
           <div className="bet-controls">
-            <div className="bet-multipliers">{[2, 3, 4, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => { setBetMultiplier(value); setCallNotice(false) }}>{value === 'all' ? 'オールイン' : value + '倍'}</button>)}</div>
+            <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => { setBetMultiplier(value); setCallNotice(false) }}>{value === 'all' ? 'オールイン' : value === 'call' ? 'コール' : value + '倍'}</button>)}</div>
             <button type="button" className="call-button" onClick={handleCall}><strong>コール</strong><span>{callAmount.toLocaleString()}</span></button>
             {callNotice && <span className="bet-notice">ベット処理は今後実装します</span>}
           </div>
