@@ -37,11 +37,10 @@ function Card({ card, hidden = false, facingOpponent = false }) {
 }
 export default function App() {
   const [cards, setCards] = useState(deal)
-  const [hannaChips, setHannaChips] = useState(STARTING_CHIPS)
+  const hannaChips = STARTING_CHIPS
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
-  const [showdown, setShowdown] = useState(false)
-  function newDeal() { setCards(deal()); setShowdown(false) }
+  function newDeal() { setCards(deal()) }
   return (
     <main className="casino">
       <header className="topbar">
@@ -53,12 +52,10 @@ export default function App() {
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
-          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!showdown} facingOpponent />)}</div><button className="showdown-button" onClick={() => setShowdown(v => !v)}>{showdown ? '伏せる' : 'ショウダウン'}</button></div>
+          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden />)}</div></div>
           <div className="opponent-info">
             <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
-            <div className="speech">「さあ、勝負しましょう。」</div>
-            <div className="chip-test"><span>表情テスト</span><button onClick={() => { setHannaChips(v => Math.max(0, v - 250)); setImageMissing(false) }}>−250</button><button onClick={() => { setHannaChips(v => v + 250); setImageMissing(false) }}>＋250</button><button onClick={() => { setHannaChips(STARTING_CHIPS); setImageMissing(false) }}>戻す</button></div>
           </div>
         </section>
         <section className="table-area" aria-label="カジノテーブル">
@@ -74,7 +71,7 @@ export default function App() {
           </div>
         </section>
         <section className="player-zone">
-          <div className="player-header"><span>YOUR HAND <small>あなたの手札</small></span><span className="always-upright">正位置固定</span></div>
+          <div className="player-header"><span>YOUR HAND <small>あなたの手札</small></span></div>
           <div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div>
           <div className="player-footer"><div className="player-chips">YOUR CHIPS <strong>1,000</strong></div><button className="deal-button" onClick={newDeal}>配り直す <span>↻</span></button></div>
           <p className="demo-note">画面確認用：ベット・役判定・対戦AIは未実装です。</p>
