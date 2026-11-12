@@ -31,7 +31,7 @@ function Card({ card, hidden = false, facingOpponent = false }) {
   return (
     <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''}`} title={description}>
       <img className={!hidden && card.reversed ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
-      {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""}`}>{card.id}</span>}
+      {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
       {!hidden && <span className="card-orientation">{card.reversed ? '逆位置' : '正位置'}</span>}
     </div>
   )
