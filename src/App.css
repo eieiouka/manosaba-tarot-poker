@@ -417,3 +417,11 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .mobile-casino .opponent-zone>.opponent-info{bottom:-48px!important}
 .mobile-casino .table-area{margin-top:53px!important}
 @media(max-width:360px){.mobile-casino .table-area{margin-top:53px!important}}
+
+/* Header: hide prototype label; mobile How to play occupies its former slot. */
+.mobile-header-how-to{display:none}
+.mobile-casino .mobile-header-how-to{display:block;border:1px solid #c8a66e;border-radius:6px;padding:7px 10px;background:linear-gradient(#594532,#302623);color:#f2dcae;font:12px Georgia,serif;white-space:nowrap}
+.mobile-casino .opponent-zone>.how-to-play{display:none!important}
+/* Lower only the mobile table, preserving the player controls at the bottom. */
+.mobile-casino .table-area{margin-top:75px!important}
+@media(max-width:360px){.mobile-casino .table-area{margin-top:75px!important}}
