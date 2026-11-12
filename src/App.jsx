@@ -87,9 +87,10 @@ export default function App() {
             <div className="opponent-name">プレイヤー <strong>あなた</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>1,000</strong></div>
           </div>
-          <div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div>
+          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">ワンペア16</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div></div>
           <div className="bet-controls">
-            <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => { setBetMultiplier(value); setCallNotice(false) }}>{value === 'all' ? 'オールイン' : value === 'call' ? 'コール' : value + '倍'}</button>)}</div>
+            <div className="hand-rank desktop-rank">ワンペア16</div>
+            <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => { setBetMultiplier(value); setCallNotice(false) }}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : 'x' + value}</button>)}</div>
             <button type="button" className="call-button" onClick={handleCall}><strong>コール</strong><span>{callAmount.toLocaleString()}</span></button>
             {callNotice && <span className="bet-notice">ベット処理は今後実装します</span>}
           </div>
