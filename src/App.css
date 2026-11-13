@@ -587,9 +587,13 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
   linear-gradient(145deg,#302c35 0%,#26242e 52%,#1c1c26 100%);
 }
 
-/* Center the community cards on the felt on desktop and mobile. */
-.table-felt .community-hand{
- top:50%!important;
- bottom:auto!important;
- transform:translateY(-50%)!important;
+/* Keep the original community-card position. On phones, reduce only
+   the table cards so their lower edges stay within the felt. */
+.mobile-casino .community-hand .card-slot,
+.mobile-casino .community-hand .card-slot img{
+ width:clamp(54px,16vw,68px)!important;
+}
+.mobile-casino .community-hand .card-slot img{
+ height:auto!important;
+ aspect-ratio:300 / 527!important;
 }
