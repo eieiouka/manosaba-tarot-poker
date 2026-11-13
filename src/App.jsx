@@ -76,7 +76,6 @@ export default function App() {
               <div className="table-pattern">✦ <span>TAROT POKER</span> ✦</div>
 
               <div className="community-hand">
-                <div className="felt-caption">TABLE / 場札</div>
                 <div className="card-row">{cards.board.map((card, i) => <Card key={i} card={card} />)}</div>
               </div>
             </div>
