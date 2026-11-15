@@ -87,11 +87,11 @@ export default function App() {
             <div className="table-felt">
               <div className="table-pattern">✦ <span>TAROT POKER</span> ✦</div>
               <div className="felt-pot"><small>POT</small><strong>{game.pot.toLocaleString()}</strong></div>
-              <div className="felt-wager felt-wager-hanna"><small>HANNA</small><span>{game.lastActions?.[1]||'待機'}</span><strong>{game.contrib[1].toLocaleString()}</strong></div>
-              <div className="felt-wager felt-wager-player"><small>YOU</small><span>{game.lastActions?.[0]||'待機'}</span><strong>{game.contrib[0].toLocaleString()}</strong></div>
+              <div className="felt-wager felt-wager-hanna"><span>{game.lastActions?.[1]||'待機'}</span><strong>{game.contrib[1].toLocaleString()}</strong></div>
+              <div className="felt-wager felt-wager-player"><span>{game.lastActions?.[0]||'待機'}</span><strong>{game.contrib[0].toLocaleString()}</strong></div>
 
               <div className="community-hand">
-                <div className="felt-caption">TABLE / 場札</div>
+                
                 <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} />)}</div>
               </div>
             </div>
