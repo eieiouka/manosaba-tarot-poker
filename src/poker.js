@@ -25,6 +25,18 @@ export function pairValue(a,b){
  return null
 }
 const lex=(a,b)=>{for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??-1)!==(b[i]??-1))return (a[i]??-1)-(b[i]??-1)}return 0}
+// Select only the strongest pair for visual highlighting, using the same
+// pair-value and card-number tie-break as hand evaluation.
+export function selectedPairIds(cards){
+ let best=null
+ for(let i=0;i<cards.length;i++)for(let j=i+1;j<cards.length;j++){
+  const value=pairValue(cards[i],cards[j])
+  if(value===null)continue
+  const ids=[cards[i].id,cards[j].id].sort((a,b)=>b-a)
+  if(!best||value>best.value||(value===best.value&&lex(ids,best.ids)>0))best={value,ids}
+ }
+ return new Set(best?best.ids:[])
+}
 export function evaluateVisible(cards){
  if(cards.length>=4)return evaluate(cards.slice(0,4))
  const all=cards.map(effective)
