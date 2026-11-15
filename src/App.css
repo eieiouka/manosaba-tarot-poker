@@ -1010,5 +1010,5 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  background:#a9dcf3!important;
 }
 .card-slot .card-number.paired-both{
- background:linear-gradient(90deg,#f5b7bc 0%,#f5b7bc 50%,#a9dcf3 50%,#a9dcf3 100%)!important;
+ background:linear-gradient(180deg,#f5b7bc 0%,#f5b7bc 50%,#a9dcf3 50%,#a9dcf3 100%)!important;
 }
