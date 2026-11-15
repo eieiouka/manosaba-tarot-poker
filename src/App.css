@@ -998,3 +998,8 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 
 /* Restore high-contrast black silhouette for the human-card badge. */
 .card-slot .human-card-mark{color:#192326!important}
+
+/* Pair indication: change only the number disc's pale background, not its position or size. */
+.card-slot .card-number.paired-number{
+ background:#f5b7bc!important;
+}
