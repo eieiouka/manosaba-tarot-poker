@@ -940,3 +940,12 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .mobile-casino .card-slot .human-card-mark{
  width:17px;height:17px;font-size:10px;top:4px;right:3px;
 }
+
+/* Check replaces fold only when nobody has bet on the postflop street. */
+.primary-action-row>.game-secondary.action-check{
+ background:linear-gradient(180deg,#8bc99b,#579d72)!important;
+ color:#142d20!important;
+ border-color:#a4deb1!important;
+ font-weight:700!important;
+}
+.primary-action-row>.game-secondary.action-check:disabled{opacity:.55}
