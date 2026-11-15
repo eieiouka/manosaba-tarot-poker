@@ -913,3 +913,14 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .mobile-casino .table-felt .community-hand .card-slot img{
  width:clamp(64px,19vw,76px)!important;
 }
+
+/* Desktop community cards ~1.3x larger (72px -> 94px), still bottom aligned. */
+@media(min-width:651px){
+ .table-felt .community-hand .card-slot,
+ .table-felt .community-hand .card-slot img{
+  width:94px!important;
+ }
+ .table-felt .community-hand{top:auto!important;bottom:13px!important}
+}
+/* Keep next-hand button near the felt edge when the turn message is absent. */
+.table-area .game-action-strip:empty{display:none!important}
