@@ -46,7 +46,7 @@ export default function App() {
   const postflopCheck = game.street > 0 && !facingBet
   const rank = evaluateVisible([...cards.player,...cards.board.slice(0,game.street)])
   const stage=['プリフロップ','フロップ','リバー'][game.street]
-  useEffect(()=>{setBetMultiplier('call')},[game.street])
+  useEffect(()=>{setBetMultiplier(game.street===0||facingBet?'call':'third')},[game.street])
   useEffect(()=>{if(game.street>0&&facingBet&&betMultiplier==='third')setBetMultiplier('call')},[game.street,facingBet,betMultiplier])
   function playerAction(action){
     if(game.finished||game.turn!==0)return
