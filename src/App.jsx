@@ -55,6 +55,7 @@ export default function App() {
     const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),650)
     return()=>clearTimeout(timer)
   },[game])
+  const hannaRank = game.showOpponent ? evaluate([...cards.opponent,...cards.board]).label : ''
   const playerRank=game.street===0?'役判定待ち':game.street===1?'フロップ公開中':rank.label
   return (
     <main className={`casino ${mobile ? "mobile-casino" : ""}`} style={mobile ? { width: viewport.width, minHeight: viewport.height, height: "auto", transform: "translateX(-50%)" } : { width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
@@ -72,6 +73,7 @@ export default function App() {
           <div className="opponent-info">
             <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
+            <div className={`hand-rank hanna-rank ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div>
           </div>
         </section>
         <section className="table-area" aria-label="カジノテーブル">
