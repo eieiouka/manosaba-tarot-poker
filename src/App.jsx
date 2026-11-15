@@ -90,6 +90,7 @@ export default function App() {
           </div>
         <div className="game-action-strip">
             <div className="game-status">{game.hand}ハンド目 / {stage} / POT {game.pot.toLocaleString()} / BB {game.bb}<div>{game.finished?game.message:game.turn===0?'あなたの番':'ハンナの番'}</div></div>
+            {game.finished && <button type="button" className="game-secondary next-hand-action" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>}
             
         </div>
         </section>
@@ -103,8 +104,8 @@ export default function App() {
             <div className="hand-rank desktop-rank">{playerRank}</div>
             <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : 'x' + value}</button>)}</div>
             <div className="primary-action-row">
-            <button type="button" className="call-button" disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
-            {game.finished?<button type="button" className="game-secondary" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>:<button type="button" className="game-secondary" disabled={game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>}
+            <button type="button" className={`call-button ${betMultiplier==='all' ? 'action-allin' : betMultiplier==='call' ? 'action-call' : 'action-raise'}`} disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
+            <button type="button" className="game-secondary" disabled={game.finished||game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>
             </div>
 
           </div>
