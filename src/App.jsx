@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, wagerAmount, boardForHanna } from './poker'
+import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, wagerAmount, boardForHanna, HUMAN } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
@@ -19,6 +19,7 @@ function Card({ card, hidden = false, facingOpponent = false }) {
   return (
     <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''}`} title={description}>
       <img className={!hidden && card.reversed ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
+      {!hidden && HUMAN.has(card.id) && <span className="human-card-mark" title="人間カード" aria-label="人間カード">♟</span>}
       {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
     </div>
   )
@@ -40,8 +41,11 @@ export default function App() {
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
   const selectedAmount = wagerAmount(game,0,betMultiplier)
+  const facingBet = callAmount > 0
+  const isBet = !facingBet && betMultiplier !== 'call' && betMultiplier !== 'all'
   const rank = evaluateVisible([...cards.player,...cards.board.slice(0,game.street)])
   const stage=['プリフロップ','フロップ','リバー'][game.street]
+  useEffect(()=>{setBetMultiplier('call')},[game.street])
   function playerAction(action){
     if(game.finished||game.turn!==0)return
     setGame(act(game,0,action,betMultiplier))
@@ -77,7 +81,7 @@ export default function App() {
           </div>
           <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
           <div className="opponent-info">
-            <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
+            <div className="opponent-name"><strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
             <div className={`hand-rank hanna-rank ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div>
           </div>
@@ -103,15 +107,15 @@ export default function App() {
         </section>
         <section className="player-zone">
           <div className="player-info opponent-info">
-            <div className="opponent-name">プレイヤー <strong>あなた</strong></div>
+            <div className="opponent-name"><strong>あなた</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{game.stacks[0].toLocaleString()}</strong></div>
           </div>
           <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div></div>
           <div className="bet-controls">
             <div className="hand-rank desktop-rank">{playerRank}</div>
-            <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : 'x' + value}</button>)}</div>
+            <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:['call','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? (game.street===0?'call':facingBet?'コール':'チェック') : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
             <div className="primary-action-row">
-            <button type="button" className={`call-button ${betMultiplier==='all' ? 'action-allin' : betMultiplier==='call' ? 'action-call' : 'action-raise'}`} disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
+            <button type="button" className={`call-button ${betMultiplier==='all' ? 'action-allin' : betMultiplier==='call' ? 'action-call' : 'action-raise'}`} disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':isBet?'ベット':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
             <button type="button" className="game-secondary" disabled={game.finished||game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>
             </div>
 
