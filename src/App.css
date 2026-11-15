@@ -771,3 +771,55 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  margin-top:5px!important;
  z-index:5!important;
 }
+
+/* Integrated game HUD: quiet four-column scoreboard anchored below the felt.
+   It is an overlay, so the established player/table coordinates do not shift. */
+.table-area .game-action-strip{
+ left:50%!important;
+ right:auto!important;
+ bottom:-7px!important;
+ transform:translateX(-50%)!important;
+ width:max-content!important;
+ max-width:calc(100% - 20px)!important;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:center!important;
+ gap:8px!important;
+ z-index:7!important;
+}
+.game-action-strip .game-status{
+ width:auto!important;
+ min-width:290px;
+ padding:5px 11px 4px!important;
+ border:1px solid #9b825e88;
+ border-radius:9px;
+ background:linear-gradient(180deg,#28232bdc,#181921ed);
+ box-shadow:0 4px 13px #0005,inset 0 1px #d6b47e20;
+ text-align:center!important;
+ color:#e7d8b8;
+}
+.game-metrics{display:grid;grid-template-columns:48px 98px 88px 48px;align-items:center;gap:0}
+.game-metric{display:flex;flex-direction:column;align-items:center;gap:2px;padding:0 5px;border-right:1px solid #b59a6a38}
+.game-metric:last-child{border-right:0}
+.game-metric small{font:9px Georgia,serif;letter-spacing:.12em;color:#c1a779}
+.game-metric strong{font-size:13px;font-weight:700;line-height:1.25;color:#f4e6c7;white-space:nowrap}
+.game-pot strong{color:#f4d18c;font-size:15px}
+.game-turn-message{margin-top:3px;padding-top:3px;border-top:1px solid #b59a6a30;font-size:10px;font-weight:700;color:#dbc99e}
+.game-action-strip .next-hand-action{font-size:11px!important;padding:9px 10px!important}
+.mobile-casino .table-area .game-action-strip{
+ left:50%!important;right:auto!important;bottom:-9px!important;
+ transform:translateX(-50%)!important;
+ width:max-content!important;max-width:calc(100% - 12px)!important;
+ gap:5px!important;
+}
+.mobile-casino .game-action-strip .game-status{
+ min-width:0!important;
+ padding:4px 6px!important;
+}
+.mobile-casino .game-metrics{grid-template-columns:35px 76px 68px 35px}
+.mobile-casino .game-metric{padding:0 3px}
+.mobile-casino .game-metric small{font-size:8px}
+.mobile-casino .game-metric strong{font-size:11px}
+.mobile-casino .game-pot strong{font-size:12px}
+.mobile-casino .game-turn-message{font-size:9px;margin-top:2px;padding-top:2px}
+.mobile-casino .game-action-strip .next-hand-action{font-size:9px!important;padding:6px!important}
