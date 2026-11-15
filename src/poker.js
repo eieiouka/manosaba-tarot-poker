@@ -118,7 +118,7 @@ export function advanceStreet(s){
 }
 export function advanceRunout(s){
  if(!s.runout||s.finished)return s
- if(s.street<2)return {...s,street:s.street+1,message:s.street===0?'フロップ公開':'リバー公開'}
+ if(s.street<2)return {...s,street:s.street+1,pot:s.pot+s.contrib[0]+s.contrib[1],contrib:[0,0],message:s.street===0?'フロップ公開':'リバー公開'}
  return settleShowdown(s)
 }
 export function act(s,who,action,multiplier='call'){
@@ -138,8 +138,8 @@ export function act(s,who,action,multiplier='call'){
  if(action==='raise'&&amount>toCall){n.checks=0;n.turn=other;return n}
  if(!matched){n.turn=other;return n}
  if(n.stacks.some(x=>x===0)&&!(action==='raise'&&amount>toCall)){
-  if(n.street===2)return settleShowdown(n)
-  n.pot+=n.contrib[0]+n.contrib[1];n.contrib=[0,0];n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
+  // Keep wagers visible throughout the delay; collect on the first board reveal.
+  n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
   return n
  }
  n.checks++
