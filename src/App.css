@@ -1003,3 +1003,12 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .card-slot .card-number.paired-number{
  background:#f5b7bc!important;
 }
+
+/* At showdown, Hanna's selected pair uses pale blue. A community card
+   used by both selected pairs is split vertically: player red / Hanna blue. */
+.card-slot .card-number.paired-hanna{
+ background:#a9dcf3!important;
+}
+.card-slot .card-number.paired-both{
+ background:linear-gradient(90deg,#f5b7bc 0%,#f5b7bc 50%,#a9dcf3 50%,#a9dcf3 100%)!important;
+}
