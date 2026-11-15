@@ -102,6 +102,11 @@ export function act(s,who,action,multiplier='call'){
  const matched=n.contrib[0]===n.contrib[1]||n.stacks[0]===0||n.stacks[1]===0
  if(action==='raise'&&amount>toCall){n.checks=0;n.turn=other;return n}
  if(!matched){n.turn=other;return n}
+ if(n.stacks.some(x=>x===0)&&!(action==='raise'&&amount>toCall)){
+  if(n.street===2)return settleShowdown(n)
+  n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
+  return n
+ }
  n.checks++
  if(n.checks<2&&n.raises===0){n.turn=other;return n}
  if(n.street===2)return settleShowdown(n)
