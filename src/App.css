@@ -962,3 +962,25 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  flex-shrink:0;
 }
 .mobile-casino .card-slot .human-card-mark svg{width:12px;height:12px}
+
+/* Larger human attribute badge on both desktop and mobile tarot cards. */
+.card-slot .human-card-mark{
+ width:30px!important;
+ height:30px!important;
+ top:5px!important;
+ right:4px!important;
+}
+.card-slot .human-card-mark svg{
+ width:22px!important;
+ height:22px!important;
+}
+.mobile-casino .card-slot .human-card-mark{
+ width:24px!important;
+ height:24px!important;
+ top:3px!important;
+ right:3px!important;
+}
+.mobile-casino .card-slot .human-card-mark svg{
+ width:18px!important;
+ height:18px!important;
+}
