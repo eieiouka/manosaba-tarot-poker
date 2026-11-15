@@ -19,7 +19,7 @@ function Card({ card, hidden = false, facingOpponent = false }) {
   return (
     <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''}`} title={description}>
       <img className={!hidden && card.reversed ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
-      {!hidden && HUMAN.has(card.id) && <span className="human-card-mark" title="人間カード" aria-label="人間カード">♟</span>}
+      {!hidden && HUMAN.has(card.id) && <span className="human-card-mark" title="人間カード" aria-label="人間カード">👤</span>}
       {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
     </div>
   )
