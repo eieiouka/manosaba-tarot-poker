@@ -104,8 +104,8 @@ export default function App() {
             <div className="table-felt">
               <div className="table-pattern">✦ <span>TAROT POKER</span> ✦</div>
               <div className="felt-pot"><small>POT</small><strong>{game.pot.toLocaleString()}</strong></div>
-              <div className="felt-wager felt-wager-hanna"><span className={['コール','チェック'].includes(game.lastActions?.[1]) ? 'wager-action-call' : ['レイズ','ベット'].includes(game.lastActions?.[1]) ? 'wager-action-raise' : game.lastActions?.[1]==='オールイン' ? 'wager-action-allin' : ''}>{game.lastActions?.[1]||'待機'}</span><strong>{game.contrib[1].toLocaleString()}</strong></div>
-              <div className="felt-wager felt-wager-player"><span className={['コール','チェック'].includes(game.lastActions?.[0]) ? 'wager-action-call' : ['レイズ','ベット'].includes(game.lastActions?.[0]) ? 'wager-action-raise' : game.lastActions?.[0]==='オールイン' ? 'wager-action-allin' : ''}>{game.lastActions?.[0]||'待機'}</span><strong>{game.contrib[0].toLocaleString()}</strong></div>
+              <div className="felt-wager felt-wager-hanna" style={{visibility:game.lastActions?.[1]?'visible':'hidden'}}><span className={['コール','チェック'].includes(game.lastActions?.[1]) ? 'wager-action-call' : ['レイズ','ベット'].includes(game.lastActions?.[1]) ? 'wager-action-raise' : game.lastActions?.[1]==='オールイン' ? 'wager-action-allin' : ''}>{game.lastActions?.[1]||''}</span><strong>{game.contrib[1].toLocaleString()}</strong></div>
+              <div className="felt-wager felt-wager-player" style={{visibility:game.lastActions?.[0]?'visible':'hidden'}}><span className={['コール','チェック'].includes(game.lastActions?.[0]) ? 'wager-action-call' : ['レイズ','ベット'].includes(game.lastActions?.[0]) ? 'wager-action-raise' : game.lastActions?.[0]==='オールイン' ? 'wager-action-allin' : ''}>{game.lastActions?.[0]||''}</span><strong>{game.contrib[0].toLocaleString()}</strong></div>
 
               <div className="community-hand">
                 
