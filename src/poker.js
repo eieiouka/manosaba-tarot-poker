@@ -3,6 +3,8 @@ export const HUMAN=new Set([0,1,2,3,4,5,6,9,12,14,21])
 const PAIRS=[[2,3],[2,4],[2,5],[3,4],[3,5],[4,5],[2,14],[3,14],[4,7],[4,8],[7,8],[4,12],[6,9],[10,21],[11,20],[12,20],[13,15],[13,16],[15,16],[17,18],[17,19],[18,19]]
 export const effective=c=>({...c,reversed:c.id===12||c.id===16||c.reversed})
 const upright=c=>!effective(c).reversed
+// The shared board is viewed from opposite ends; 12 and 16 remain reversed for both players.
+export const boardForHanna=board=>board.map(c=>effective({...c,reversed:!c.reversed}))
 export function pairValue(a,b){
  a=effective(a);b=effective(b)
  const x=Math.min(a.id,b.id),y=Math.max(a.id,b.id)
@@ -74,7 +76,7 @@ export function wagerAmount(s,who,multiplier='call'){
 }
 export function settleShowdown(s){
  const n={...s,stacks:s.stacks.slice(),street:2,runout:false,showOpponent:true,finished:true,turn:-1}
- const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...n.cards.board])
+ const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...boardForHanna(n.cards.board)])
  const cmp=a.rank-b.rank||lex(a.tie,b.tie)
  n.winner=cmp>0?0:cmp<0?1:-1
  if(n.winner===-1){n.stacks[0]+=Math.floor(n.pot/2);n.stacks[1]+=n.pot-Math.floor(n.pot/2)}
