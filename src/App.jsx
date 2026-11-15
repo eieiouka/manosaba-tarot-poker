@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, wagerAmount, boardForHanna, HUMAN, selectedPairIds } from './poker'
+import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, wagerAmount, boardForHanna, HUMAN, selectedHandIds } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
@@ -47,9 +47,9 @@ export default function App() {
   const rank = evaluateVisible([...cards.player,...cards.board.slice(0,game.street)])
   // Highlight only the pair adopted as strongest, not every valid pair.
   const visibleCards=[...cards.player,...cards.board.slice(0,game.street)]
-  const pairedIds=selectedPairIds(visibleCards)
+  const pairedIds=selectedHandIds(visibleCards)
   const hannaPairedIds=game.showOpponent
-    ? selectedPairIds([...cards.opponent,...boardForHanna(cards.board)])
+    ? selectedHandIds([...cards.opponent,...boardForHanna(cards.board)])
     : new Set()
   const stage=['プリフロップ','フロップ','リバー'][game.street]
   useEffect(()=>{setBetMultiplier(game.street===0||facingBet?'call':'third')},[game.street])
