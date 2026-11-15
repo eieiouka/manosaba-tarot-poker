@@ -1012,3 +1012,14 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .card-slot .card-number.paired-both{
  background:linear-gradient(180deg,#a9dcf3 0%,#a9dcf3 50%,#f5b7bc 50%,#f5b7bc 100%)!important;
 }
+
+/* Match the felt action text to the colors of the action buttons. */
+.table-felt .felt-wager span.wager-action-call{
+ color:#8bc99b!important;
+}
+.table-felt .felt-wager span.wager-action-raise{
+ color:#e9aa63!important;
+}
+.table-felt .felt-wager span.wager-action-allin{
+ color:#f08082!important;
+}
