@@ -66,16 +66,17 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  const bb=blindFor(hand),sb=Math.round(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
- return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:contrib[0]+contrib[1],street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
+ return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
 }
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
  if(multiplier==='call')return Math.min(toCall,s.stacks[who])
- const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
+ const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:multiplier==='half'?s.contrib[other]+Math.max(s.bb,Math.ceil(s.pot/2)):multiplier==='pot'?s.contrib[other]+Math.max(s.bb,s.pot):Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
 }
 export function settleShowdown(s){
  const n={...s,stacks:s.stacks.slice(),street:2,runout:false,showOpponent:true,finished:true,turn:-1}
+ n.pot+=n.contrib[0]+n.contrib[1];n.contrib=[0,0]
  const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...boardForHanna(n.cards.board)])
  const cmp=a.rank-b.rank||lex(a.tie,b.tie)
  n.winner=cmp>0?0:cmp<0?1:-1
@@ -93,21 +94,21 @@ export function act(s,who,action,multiplier='call'){
  if(s.finished||s.turn!==who)return s
  const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])]}
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
- if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.stacks[other]+=n.pot;n.turn=-1;return n}
+ if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
  let amount=0
  if(action==='raise'){
   amount=wagerAmount(n,who,multiplier)
   if(amount<=toCall&&n.stacks[who]>toCall)return s
   n.raises++
  }else amount=Math.min(toCall,n.stacks[who])
- n.lastActions[who]=action==='raise'?(multiplier==='all'||amount===s.stacks[who]?'オールイン':'レイズ'):(toCall>0?'コール':'チェック')
- n.stacks[who]-=amount;n.contrib[who]+=amount;n.committed[who]+=amount;n.pot+=amount
+ n.lastActions[who]=action==='raise'?(multiplier==='all'||amount===s.stacks[who]?'オールイン':toCall===0?'ベット':'レイズ'):(toCall>0?'コール':'チェック')
+ n.stacks[who]-=amount;n.contrib[who]+=amount;n.committed[who]+=amount
  const matched=n.contrib[0]===n.contrib[1]||n.stacks[0]===0||n.stacks[1]===0
  if(action==='raise'&&amount>toCall){n.checks=0;n.turn=other;return n}
  if(!matched){n.turn=other;return n}
  if(n.stacks.some(x=>x===0)&&!(action==='raise'&&amount>toCall)){
   if(n.street===2)return settleShowdown(n)
-  n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
+  n.pot+=n.contrib[0]+n.contrib[1];n.contrib=[0,0];n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
   return n
  }
  n.checks++
@@ -118,7 +119,7 @@ export function act(s,who,action,multiplier='call'){
   n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
   return n
  }
- n.street++;n.contrib=[0,0];n.lastActions=['',''];n.checks=0;n.raises=0;n.turn=1-n.button
+ n.pot+=n.contrib[0]+n.contrib[1];n.street++;n.contrib=[0,0];n.lastActions=['',''];n.checks=0;n.raises=0;n.turn=1-n.button
  n.message=['プリフロップ','フロップ','リバー'][n.street]
  return n
 }
