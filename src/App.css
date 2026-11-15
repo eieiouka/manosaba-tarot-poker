@@ -597,3 +597,12 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  height:auto!important;
  aspect-ratio:300 / 527!important;
 }
+
+/* Playable prototype: compact action/status controls, without changing table layout. */
+.game-status{width:100%;font-size:10px;line-height:1.35;text-align:center;color:#d8c69e;padding:3px 1px}
+.game-status div{font-size:12px;font-weight:700;color:#f3dfb5;margin-top:3px}
+.game-secondary{width:100%;border:1px solid #8f7357;border-radius:6px;background:#302b35;color:#f0dbba;font-size:12px;padding:6px 8px}
+.game-secondary:disabled,.call-button:disabled{opacity:.55;cursor:default}
+.mobile-casino .game-status{font-size:9px}
+.mobile-casino .game-status div{font-size:10px}
+.mobile-casino .game-secondary{padding:4px 6px;font-size:10px}
