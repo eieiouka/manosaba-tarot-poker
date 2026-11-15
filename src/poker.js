@@ -65,7 +65,7 @@ export function act(s,who,action,multiplier='call'){
  if(action==='raise'&&amount>toCall){n.checks=0;n.turn=other;return n}
  if(!matched){n.turn=other;return n}
  n.checks++
- if(n.checks<2){n.turn=other;return n}
+ if(n.checks<2&&n.raises===0){n.turn=other;return n}
  if(n.street===2||n.stacks.some(x=>x===0)){
   const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...n.cards.board])
   const cmp=a.rank-b.rank||lex(a.tie,b.tie)
