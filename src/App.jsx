@@ -86,6 +86,9 @@ export default function App() {
           <div className="table-outer">
             <div className="table-felt">
               <div className="table-pattern">✦ <span>TAROT POKER</span> ✦</div>
+              <div className="felt-pot"><small>POT</small><strong>{game.pot.toLocaleString()}</strong></div>
+              <div className="felt-wager felt-wager-hanna"><small>HANNA</small><span>{game.lastActions?.[1]||'待機'}</span><strong>{game.contrib[1].toLocaleString()}</strong></div>
+              <div className="felt-wager felt-wager-player"><small>YOU</small><span>{game.lastActions?.[0]||'待機'}</span><strong>{game.contrib[0].toLocaleString()}</strong></div>
 
               <div className="community-hand">
                 <div className="felt-caption">TABLE / 場札</div>
@@ -95,12 +98,7 @@ export default function App() {
           </div>
         <div className="game-action-strip">
             <div className="game-status" aria-label="対局情報">
-              <div className="game-metrics">
-                <span className="game-metric"><small>HAND</small><strong>{game.hand}</strong></span>
-                <span className="game-metric game-stage"><small>ROUND</small><strong>{stage}</strong></span>
-                <span className="game-metric game-pot"><small>POT</small><strong>{game.pot.toLocaleString()}</strong></span>
-                <span className="game-metric"><small>BB</small><strong>{game.bb.toLocaleString()}</strong></span>
-              </div>
+              
               <div className="game-turn-message">{game.finished?game.message:game.runout?'場札公開中':game.turn===0?'あなたの番':'ハンナの番'}</div>
             </div>
             {game.finished && <button type="button" className="game-secondary next-hand-action" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>}
