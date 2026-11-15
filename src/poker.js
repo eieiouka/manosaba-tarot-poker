@@ -101,7 +101,7 @@ export function wagerAmount(s,who,multiplier='call'){
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
 }
 export function settleShowdown(s){
- const n={...s,stacks:s.stacks.slice(),street:2,runout:false,showOpponent:true,finished:true,turn:-1}
+ const n={...s,stacks:s.stacks.slice(),street:2,runout:false,showOpponent:true,finished:true,turn:-1,lastActions:['','']}
  n.pot+=n.contrib[0]+n.contrib[1];n.contrib=[0,0]
  const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...boardForHanna(n.cards.board)])
  const cmp=a.rank-b.rank||lex(a.tie,b.tie)
@@ -118,7 +118,7 @@ export function advanceStreet(s){
 }
 export function advanceRunout(s){
  if(!s.runout||s.finished)return s
- if(s.street<2)return {...s,street:s.street+1,pot:s.pot+s.contrib[0]+s.contrib[1],contrib:[0,0],message:s.street===0?'フロップ公開':'リバー公開'}
+ if(s.street<2)return {...s,street:s.street+1,pot:s.pot+s.contrib[0]+s.contrib[1],contrib:[0,0],lastActions:['',''],message:s.street===0?'フロップ公開':'リバー公開'}
  return settleShowdown(s)
 }
 export function act(s,who,action,multiplier='call'){
