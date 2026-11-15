@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { STARTING_CHIPS, newHand, act, evaluate, wagerAmount } from './poker'
+import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, wagerAmount } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
@@ -40,7 +40,7 @@ export default function App() {
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
   const selectedAmount = wagerAmount(game,0,betMultiplier)
-  const rank = game.street===2?evaluate([...cards.player,...cards.board]):null
+  const rank = evaluateVisible([...cards.player,...cards.board.slice(0,game.street)])
   const stage=['プリフロップ','フロップ','リバー'][game.street]
   function playerAction(action){
     if(game.finished||game.turn!==0)return
@@ -56,8 +56,13 @@ export default function App() {
     const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),650)
     return()=>clearTimeout(timer)
   },[game])
+  useEffect(()=>{
+    if(!game.runout||game.finished)return
+    const timer=setTimeout(()=>setGame(prev=>advanceRunout(prev)),850)
+    return()=>clearTimeout(timer)
+  },[game])
   const hannaRank = game.showOpponent ? evaluate([...cards.opponent,...cards.board]).label : ''
-  const playerRank=game.street===0?'役判定待ち':game.street===1?'フロップ公開中':rank.label
+  const playerRank=rank.label
   return (
     <main className={`casino ${mobile ? "mobile-casino" : ""}`} style={mobile ? { width: viewport.width, minHeight: viewport.height, height: "auto", transform: "translateX(-50%)" } : { width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
       <header className="topbar">
