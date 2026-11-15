@@ -68,6 +68,20 @@ export function evaluate(cards){
  }
  return best
 }
+// Card IDs used by the selected hand: three for straight/three-card,
+// otherwise the strongest pair. This mirrors the hand evaluator's ranking.
+export function selectedHandIds(cards){
+ if(cards.length<2)return new Set()
+ const result=evaluateVisible(cards)
+ if(result.rank<2)return result.rank===1?selectedPairIds(cards):new Set()
+ const best=result.tie
+ for(let i=0;i<cards.length;i++)for(let j=i+1;j<cards.length;j++)for(let k=j+1;k<cards.length;k++){
+  const triple=[cards[i],cards[j],cards[k]]
+  const hand=evaluateVisible(triple)
+  if(hand.rank===result.rank&&lex(hand.tie,best)===0)return new Set(triple.map(c=>c.id))
+ }
+ return new Set()
+}
 export function drawCards(){
  const deck=Array.from({length:22},(_,id)=>id)
  for(let i=21;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
