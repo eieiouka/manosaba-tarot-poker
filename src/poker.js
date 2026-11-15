@@ -78,7 +78,7 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  const bb=blindFor(hand),sb=Math.floor(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
- return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
+ return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,pendingStreet:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
 }
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
@@ -97,13 +97,18 @@ export function settleShowdown(s){
  n.message=cmp>0?'あなたの勝利！':cmp<0?'遠野ハンナの勝利':'引き分け'
  return n
 }
+export function advanceStreet(s){
+ if(!s.pendingStreet||s.finished)return s
+ const street=s.street+1
+ return {...s,street,pendingStreet:false,contrib:[0,0],lastActions:['',''],checks:0,raises:0,turn:1-s.button,message:['プリフロップ','フロップ','リバー'][street]}
+}
 export function advanceRunout(s){
  if(!s.runout||s.finished)return s
  if(s.street<2)return {...s,street:s.street+1,message:s.street===0?'フロップ公開':'リバー公開'}
  return settleShowdown(s)
 }
 export function act(s,who,action,multiplier='call'){
- if(s.finished||s.turn!==who)return s
+ if(s.finished||s.pendingStreet||s.turn!==who)return s
  const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])]}
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
  if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
@@ -131,7 +136,7 @@ export function act(s,who,action,multiplier='call'){
   n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
   return n
  }
- n.pot+=n.contrib[0]+n.contrib[1];n.street++;n.contrib=[0,0];n.lastActions=['',''];n.checks=0;n.raises=0;n.turn=1-n.button
- n.message=['プリフロップ','フロップ','リバー'][n.street]
+ n.pot+=n.contrib[0]+n.contrib[1];n.pendingStreet=true;n.turn=-1
+ n.message='次の場札を公開します'
  return n
 }
