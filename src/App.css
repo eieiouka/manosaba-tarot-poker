@@ -751,3 +751,23 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .mobile-casino .opponent-zone>.opponent-info>.hanna-rank{
  top:calc(100% + 5px)!important;
 }
+
+/* Desktop: lift Hanna's chip panel and its attached rank box clear of table. */
+@media(min-width:651px){
+ .opponent-zone>.opponent-info{
+  transform:translateY(-35px)!important;
+ }
+}
+/* Mobile: Hanna's rank belongs below her face-down cards, not below chips. */
+.hanna-rank-mobile{display:none!important}
+.mobile-casino .opponent-zone>.opponent-info>.hanna-rank{display:none!important}
+.mobile-casino .hanna-hand-side>.hanna-rank-mobile{
+ display:flex!important;
+ position:relative!important;
+ width:100%!important;
+ min-height:30px!important;
+ padding:4px 5px!important;
+ font-size:clamp(10px,2.8vw,14px)!important;
+ margin-top:5px!important;
+ z-index:5!important;
+}
