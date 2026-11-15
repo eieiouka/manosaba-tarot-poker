@@ -23,6 +23,24 @@ export function pairValue(a,b){
  return null
 }
 const lex=(a,b)=>{for(let i=0;i<Math.max(a.length,b.length);i++){if((a[i]??-1)!==(b[i]??-1))return (a[i]??-1)-(b[i]??-1)}return 0}
+export function evaluateVisible(cards){
+ if(cards.length>=4)return evaluate(cards.slice(0,4))
+ const all=cards.map(effective)
+ const ids=all.map(c=>c.id).sort((a,b)=>b-a)
+ let best={rank:0,tie:ids,label:'ハイカード'+ids[0]}
+ for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++){
+  const value=pairValue(all[i],all[j])
+  if(value===null)continue
+  const pairIds=[all[i].id,all[j].id].sort((a,b)=>b-a)
+  const candidate={rank:1,tie:[value,...pairIds],label:'ワンペア'+value}
+  if(best.rank<1||lex(candidate.tie,best.tie)>0)best=candidate
+ }
+ if(all.length===3){
+  if(ids[0]===ids[1]+1&&ids[1]===ids[2]+1&&all.every(upright))best={rank:2,tie:[ids[0]],label:'ストレート'+ids[0]}
+  if([[0,1],[0,2],[1,2]].every(([i,j])=>pairValue(all[i],all[j])!==null))best={rank:3,tie:ids,label:'スリーカード'+ids[0]}
+ }
+ return best
+}
 export function evaluate(cards){
  const all=cards.map(effective);let best={rank:0,tie:[],label:'ハイカード'}
  for(let i=0;i<4;i++)for(let j=i+1;j<4;j++)for(let k=j+1;k<4;k++){
@@ -46,13 +64,28 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  const bb=blindFor(hand),sb=Math.round(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
- return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:contrib[0]+contrib[1],street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false}
+ return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:contrib[0]+contrib[1],street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false}
 }
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
  if(multiplier==='call')return Math.min(toCall,s.stacks[who])
  const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
+}
+export function settleShowdown(s){
+ const n={...s,stacks:s.stacks.slice(),street:2,runout:false,showOpponent:true,finished:true,turn:-1}
+ const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...n.cards.board])
+ const cmp=a.rank-b.rank||lex(a.tie,b.tie)
+ n.winner=cmp>0?0:cmp<0?1:-1
+ if(n.winner===-1){n.stacks[0]+=Math.floor(n.pot/2);n.stacks[1]+=n.pot-Math.floor(n.pot/2)}
+ else n.stacks[n.winner]+=n.pot
+ n.message=cmp>0?'あなたの勝利！':cmp<0?'遠野ハンナの勝利':'引き分け'
+ return n
+}
+export function advanceRunout(s){
+ if(!s.runout||s.finished)return s
+ if(s.street<2)return {...s,street:s.street+1,message:s.street===0?'フロップ公開':'リバー公開'}
+ return settleShowdown(s)
 }
 export function act(s,who,action,multiplier='call'){
  if(s.finished||s.turn!==who)return s
@@ -71,14 +104,11 @@ export function act(s,who,action,multiplier='call'){
  if(!matched){n.turn=other;return n}
  n.checks++
  if(n.checks<2&&n.raises===0){n.turn=other;return n}
- if(n.street===2||n.stacks.some(x=>x===0)){
-  const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...n.cards.board])
-  const cmp=a.rank-b.rank||lex(a.tie,b.tie)
-  n.finished=true;n.showOpponent=true;n.winner=cmp>0?0:cmp<0?1:-1
-  if(n.winner===-1){n.stacks[0]+=Math.floor(n.pot/2);n.stacks[1]+=n.pot-Math.floor(n.pot/2)}
-  else n.stacks[n.winner]+=n.pot
-  n.message=cmp>0?'あなたの勝利！':cmp<0?'遠野ハンナの勝利':'引き分け'
-  n.turn=-1;return n
+ if(n.street===2)return settleShowdown(n)
+ if(n.stacks.some(x=>x===0)){
+  // Do not settle until every community card has been revealed.
+  n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
+  return n
  }
  n.street++;n.contrib=[0,0];n.checks=0;n.raises=0;n.turn=1-n.button
  n.message=['プリフロップ','フロップ','リバー'][n.street]
