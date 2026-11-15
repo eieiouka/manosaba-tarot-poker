@@ -85,11 +85,11 @@ export default function App() {
               </div>
             </div>
           </div>
-        </section>
         <div className="game-action-strip">
             <div className="game-status">{game.hand}ハンド目 / {stage} / POT {game.pot.toLocaleString()} / BB {game.bb}<div>{game.finished?game.message:game.turn===0?'あなたの番':'ハンナの番'}</div></div>
             {game.finished?<button type="button" className="game-secondary" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>:<button type="button" className="game-secondary" disabled={game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>}
         </div>
+        </section>
         <section className="player-zone">
           <div className="player-info opponent-info">
             <div className="opponent-name">プレイヤー <strong>あなた</strong></div>
