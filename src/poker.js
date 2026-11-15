@@ -114,7 +114,7 @@ export function settleShowdown(s){
 export function advanceStreet(s){
  if(!s.pendingStreet||s.finished)return s
  const street=s.street+1
- return {...s,street,pendingStreet:false,contrib:[0,0],lastActions:['',''],checks:0,raises:0,turn:1-s.button,message:['プリフロップ','フロップ','リバー'][street]}
+ return {...s,street,pot:s.pot+s.contrib[0]+s.contrib[1],pendingStreet:false,contrib:[0,0],lastActions:['',''],checks:0,raises:0,turn:1-s.button,message:['プリフロップ','フロップ','リバー'][street]}
 }
 export function advanceRunout(s){
  if(!s.runout||s.finished)return s
@@ -150,7 +150,7 @@ export function act(s,who,action,multiplier='call'){
   n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
   return n
  }
- n.pot+=n.contrib[0]+n.contrib[1];n.pendingStreet=true;n.turn=-1
+ n.pendingStreet=true;n.turn=-1
  n.message='次の場札を公開します'
  return n
 }
