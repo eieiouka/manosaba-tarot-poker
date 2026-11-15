@@ -48,6 +48,12 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
  return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:contrib[0]+contrib[1],street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false}
 }
+export function wagerAmount(s,who,multiplier='call'){
+ const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
+ if(multiplier==='call')return Math.min(toCall,s.stacks[who])
+ const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
+ return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
+}
 export function act(s,who,action,multiplier='call'){
  if(s.finished||s.turn!==who)return s
  const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice()}
@@ -55,8 +61,7 @@ export function act(s,who,action,multiplier='call'){
  if(action==='fold'){n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.stacks[other]+=n.pot;n.turn=-1;return n}
  let amount=0
  if(action==='raise'){
-  const target=multiplier==='all'?n.contrib[who]+n.stacks[who]:Math.max(n.contrib[other]+n.bb,n.contrib[other]*Number(multiplier))
-  amount=Math.min(n.stacks[who],Math.max(toCall,target-n.contrib[who]))
+  amount=wagerAmount(n,who,multiplier)
   if(amount<=toCall&&n.stacks[who]>toCall)return s
   n.raises++
  }else amount=Math.min(toCall,n.stacks[who])
