@@ -66,7 +66,7 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  const bb=blindFor(hand),sb=Math.round(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
- return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:contrib[0]+contrib[1],street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false}
+ return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:contrib[0]+contrib[1],street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
 }
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
@@ -91,15 +91,16 @@ export function advanceRunout(s){
 }
 export function act(s,who,action,multiplier='call'){
  if(s.finished||s.turn!==who)return s
- const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice()}
+ const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])]}
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
- if(action==='fold'){n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.stacks[other]+=n.pot;n.turn=-1;return n}
+ if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.stacks[other]+=n.pot;n.turn=-1;return n}
  let amount=0
  if(action==='raise'){
   amount=wagerAmount(n,who,multiplier)
   if(amount<=toCall&&n.stacks[who]>toCall)return s
   n.raises++
  }else amount=Math.min(toCall,n.stacks[who])
+ n.lastActions[who]=action==='raise'?(multiplier==='all'||amount===s.stacks[who]?'オールイン':'レイズ'):(toCall>0?'コール':'チェック')
  n.stacks[who]-=amount;n.contrib[who]+=amount;n.committed[who]+=amount;n.pot+=amount
  const matched=n.contrib[0]===n.contrib[1]||n.stacks[0]===0||n.stacks[1]===0
  if(action==='raise'&&amount>toCall){n.checks=0;n.turn=other;return n}
@@ -117,7 +118,7 @@ export function act(s,who,action,multiplier='call'){
   n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
   return n
  }
- n.street++;n.contrib=[0,0];n.checks=0;n.raises=0;n.turn=1-n.button
+ n.street++;n.contrib=[0,0];n.lastActions=['',''];n.checks=0;n.raises=0;n.turn=1-n.button
  n.message=['プリフロップ','フロップ','リバー'][n.street]
  return n
 }
