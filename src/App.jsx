@@ -3,18 +3,6 @@ import './App.css'
 import { STARTING_CHIPS, newHand, act, evaluate } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
-function deal() {
-  const deck = Array.from({ length: 22 }, (_, id) => id)
-  for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[deck[i], deck[j]] = [deck[j], deck[i]]
-  }
-  return {
-    player: deck.slice(0, 2).map(id => ({ id, reversed: false })),
-    board: deck.slice(2, 4).map(id => ({ id, reversed: Math.random() < .5 })),
-    opponent: deck.slice(4, 6).map(id => ({ id, reversed: false })),
-  }
-}
 function hannaMood(chips) {
   const ratio = chips / STARTING_CHIPS
   if (ratio <= 0) return -4
