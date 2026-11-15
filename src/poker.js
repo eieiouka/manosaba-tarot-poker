@@ -1,4 +1,4 @@
-export const STARTING_CHIPS=1280
+export const STARTING_CHIPS=1000
 export const HUMAN=new Set([0,1,2,3,4,5,6,9,12,14,21])
 const PAIRS=[[2,3],[2,4],[2,5],[3,4],[3,5],[4,5],[2,14],[3,14],[4,7],[4,8],[7,8],[4,12],[6,9],[10,21],[11,20],[12,20],[13,15],[13,16],[15,16],[17,18],[17,19],[18,19]]
 export const effective=c=>({...c,reversed:c.id===12||c.id===16||c.reversed})
@@ -61,9 +61,9 @@ export function drawCards(){
  for(let i=21;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
  return {player:deck.slice(0,2).map(id=>effective({id,reversed:false})),board:deck.slice(2,4).map(id=>effective({id,reversed:Math.random()<.5})),opponent:deck.slice(4,6).map(id=>effective({id,reversed:false}))}
 }
-export function blindFor(hand){return Math.max(1,Math.round(32*Math.pow(1.5,Math.floor((hand-1)/10))))}
+export function blindFor(hand){return Math.max(1,Math.floor(32*Math.pow(1.5,Math.floor((hand-1)/10))))}
 export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
- const bb=blindFor(hand),sb=Math.round(bb/2),button=(hand-1)%2
+ const bb=blindFor(hand),sb=Math.floor(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
  return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
@@ -71,7 +71,7 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
  if(multiplier==='call')return Math.min(toCall,s.stacks[who])
- const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:multiplier==='third'?s.contrib[other]+Math.max(s.bb,Math.ceil(s.pot/3)):multiplier==='half'?s.contrib[other]+Math.max(s.bb,Math.ceil(s.pot/2)):multiplier==='pot'?s.contrib[other]+Math.max(s.bb,s.pot):Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
+ const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:multiplier==='third'?s.contrib[other]+Math.floor(s.pot/3):multiplier==='half'?s.contrib[other]+Math.floor(s.pot/2):multiplier==='pot'?s.contrib[other]+s.pot:Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
 }
 export function settleShowdown(s){
