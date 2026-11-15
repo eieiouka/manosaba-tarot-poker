@@ -70,7 +70,7 @@ export default function App() {
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
-          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} />)}</div></div>
+          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
           <div className="opponent-info">
             <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
