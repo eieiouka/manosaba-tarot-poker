@@ -649,3 +649,32 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 }
 .mobile-casino .primary-action-row{gap:4px}
 .mobile-casino .primary-action-row>.game-secondary{font-size:clamp(10px,2.7vw,13px)}
+
+/* Give longer action labels enough room; keep fold beside the primary action. */
+.primary-action-row>.call-button{
+ flex:1.4 1 0!important;
+ white-space:nowrap!important;
+ padding-left:3px!important;
+ padding-right:3px!important;
+}
+.primary-action-row>.call-button strong,
+.primary-action-row>.call-button span{white-space:nowrap!important}
+.primary-action-row>.game-secondary{
+ flex:1 1 0!important;
+ white-space:nowrap!important;
+ padding-left:2px!important;
+ padding-right:2px!important;
+}
+.mobile-casino .primary-action-row>.call-button{font-size:clamp(10px,2.9vw,14px)!important}
+/* Hanna's rank panel remains blank until her cards are revealed. */
+.opponent-info .hanna-rank{
+ width:100%;
+ min-height:34px;
+ margin-top:5px;
+ font-size:clamp(12px,1.5vw,17px);
+}
+.mobile-casino .opponent-info .hanna-rank{
+ min-height:28px!important;
+ padding:4px 5px!important;
+ font-size:clamp(11px,3vw,14px)!important;
+}
