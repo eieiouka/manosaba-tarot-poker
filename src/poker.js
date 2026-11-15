@@ -71,7 +71,7 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
  if(multiplier==='call')return Math.min(toCall,s.stacks[who])
- const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:multiplier==='half'?s.contrib[other]+Math.max(s.bb,Math.ceil(s.pot/2)):multiplier==='pot'?s.contrib[other]+Math.max(s.bb,s.pot):Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
+ const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:multiplier==='third'?s.contrib[other]+Math.max(s.bb,Math.ceil(s.pot/3)):multiplier==='half'?s.contrib[other]+Math.max(s.bb,Math.ceil(s.pot/2)):multiplier==='pot'?s.contrib[other]+Math.max(s.bb,s.pot):Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
 }
 export function settleShowdown(s){
