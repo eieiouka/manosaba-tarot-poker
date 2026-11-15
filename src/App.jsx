@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { STARTING_CHIPS, newHand, act, evaluate } from './poker'
+import { STARTING_CHIPS, newHand, act, evaluate, wagerAmount } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
@@ -38,7 +38,8 @@ export default function App() {
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
-  const callAmount = Math.max(0,game.contrib[1]-game.contrib[0])
+  const callAmount = wagerAmount(game,0,'call')
+  const selectedAmount = wagerAmount(game,0,betMultiplier)
   const rank = game.street===2?evaluate([...cards.player,...cards.board]):null
   const stage=['プリフロップ','フロップ','リバー'][game.street]
   function playerAction(action){
@@ -102,7 +103,7 @@ export default function App() {
             <div className="hand-rank desktop-rank">{playerRank}</div>
             <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : 'x' + value}</button>)}</div>
             <div className="primary-action-row">
-            <button type="button" className="call-button" disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':'レイズ'}</strong><span>{betMultiplier==='call'?callAmount.toLocaleString():betMultiplier==='all'?'全額':'x'+betMultiplier}</span></button>
+            <button type="button" className="call-button" disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
             {game.finished?<button type="button" className="game-secondary" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>:<button type="button" className="game-secondary" disabled={game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>}
             </div>
 
