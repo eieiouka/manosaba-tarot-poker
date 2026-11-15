@@ -13,14 +13,14 @@ function hannaMood(chips) {
   if (ratio > 1) return 1
   return 0
 }
-function Card({ card, hidden = false, facingOpponent = false, paired = false }) {
+function Card({ card, hidden = false, facingOpponent = false, paired = false, pairTone = 'player' }) {
   const src = hidden ? '/tarot/back.png' : `/tarot/${card.id}.png`
   const description = hidden ? '裏向きのカード' : `${CARD_NAMES[card.id]}・${card.reversed ? '逆位置' : '正位置'}`
   return (
     <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''}`} title={description}>
       <img className={!hidden && card.reversed && card.id !== 12 && card.id !== 16 ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
       {!hidden && HUMAN.has(card.id) && <span className="human-card-mark" title="人間カード" aria-label="人間カード"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.5" r="4" fill="currentColor"/><path d="M3.5 21c.2-5.2 3.5-8 8.5-8s8.3 2.8 8.5 8H3.5Z" fill="currentColor"/></svg></span>}
-      {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""} ${paired ? "paired-number" : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
+      {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""} ${paired ? "paired-number" : ""} ${paired ? `paired-${pairTone}` : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
     </div>
   )
 }
@@ -87,7 +87,7 @@ export default function App() {
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
-          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} paired={hannaPairedIds.has(card.id)} />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
+          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} paired={hannaPairedIds.has(card.id)} pairTone="hanna" />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
           <div className="opponent-info">
             <div className="opponent-name"><strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
@@ -104,7 +104,7 @@ export default function App() {
 
               <div className="community-hand">
                 
-                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} paired={pairedIds.has(card.id)} />)}</div>
+                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} paired={pairedIds.has(card.id) || hannaPairedIds.has(card.id)} pairTone={game.showOpponent && pairedIds.has(card.id) && hannaPairedIds.has(card.id) ? "both" : game.showOpponent && hannaPairedIds.has(card.id) ? "hanna" : "player"} />)}</div>
               </div>
             </div>
           </div>
