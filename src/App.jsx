@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { STARTING_CHIPS, newHand, act, evaluate } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
-const STARTING_CHIPS = 1000
 function deal() {
   const deck = Array.from({ length: 22 }, (_, id) => id)
   for (let i = deck.length - 1; i > 0; i--) {
@@ -44,14 +44,30 @@ export default function App() {
   }, [])
   const mobile = viewport.width <= 650
   const fit = mobile ? 1 : Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
-  const [cards, setCards] = useState(deal)
-  const hannaChips = STARTING_CHIPS
+  const [game, setGame] = useState(() => newHand())
+  const cards = game.cards
+  const hannaChips = game.stacks[1]
   const mood = hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
-  const [callNotice, setCallNotice] = useState(false)
-  const callAmount = 1260
-  function handleCall() { setCallNotice(true) }
+  const callAmount = Math.max(0,game.contrib[1]-game.contrib[0])
+  const rank = game.street===2?evaluate([...cards.player,...cards.board]):null
+  const stage=['プリフロップ','フロップ','リバー'][game.street]
+  function playerAction(action){
+    if(game.finished||game.turn!==0)return
+    setGame(act(game,0,action,betMultiplier))
+  }
+  function nextHand(){
+    if(!game.finished)return
+    setGame(game.stacks.some(x=>x<=0)?newHand():newHand(game.stacks,game.hand+1))
+    setBetMultiplier('call')
+  }
+  useEffect(()=>{
+    if(game.finished||game.turn!==1)return
+    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),650)
+    return()=>clearTimeout(timer)
+  },[game])
+  const playerRank=game.street===0?'役判定待ち':game.street===1?'フロップ公開中':rank.label
   return (
     <main className={`casino ${mobile ? "mobile-casino" : ""}`} style={mobile ? { width: viewport.width, minHeight: viewport.height, height: "auto", transform: "translateX(-50%)" } : { width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
       <header className="topbar">
@@ -64,7 +80,7 @@ export default function App() {
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
-          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden />)}</div></div>
+          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} />)}</div></div>
           <div className="opponent-info">
             <div className="opponent-name">対戦相手 <strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
@@ -77,7 +93,7 @@ export default function App() {
 
               <div className="community-hand">
                 <div className="felt-caption">TABLE / 場札</div>
-                <div className="card-row">{cards.board.map((card, i) => <Card key={i} card={card} />)}</div>
+                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} />)}</div>
               </div>
             </div>
           </div>
@@ -85,14 +101,15 @@ export default function App() {
         <section className="player-zone">
           <div className="player-info opponent-info">
             <div className="opponent-name">プレイヤー <strong>あなた</strong></div>
-            <div className="chip-display"><span>CHIPS</span><strong>1,000</strong></div>
+            <div className="chip-display"><span>CHIPS</span><strong>{game.stacks[0].toLocaleString()}</strong></div>
           </div>
-          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">ワンペア16</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div></div>
+          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div></div>
           <div className="bet-controls">
-            <div className="hand-rank desktop-rank">ワンペア16</div>
-            <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => { setBetMultiplier(value); setCallNotice(false) }}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : 'x' + value}</button>)}</div>
-            <button type="button" className="call-button" onClick={handleCall}><strong>コール</strong><span>{callAmount.toLocaleString()}</span></button>
-            {callNotice && <span className="bet-notice">ベット処理は今後実装します</span>}
+            <div className="hand-rank desktop-rank">{playerRank}</div>
+            <div className="bet-multipliers">{['call', 2, 3, 'all'].map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : 'x' + value}</button>)}</div>
+            <button type="button" className="call-button" disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':'レイズ'}</strong><span>{betMultiplier==='call'?callAmount.toLocaleString():betMultiplier==='all'?'全額':'x'+betMultiplier}</span></button>
+            <div className="game-status">{game.hand}ハンド目 / {stage} / POT {game.pot.toLocaleString()} / BB {game.bb}<div>{game.finished?game.message:game.turn===0?'あなたの番':'ハンナの番'}</div></div>
+            {game.finished?<button type="button" className="game-secondary" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>:<button type="button" className="game-secondary" disabled={game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>}
           </div>
         </section>
       </div>
