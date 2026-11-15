@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, wagerAmount, boardForHanna, HUMAN, selectedPairIds } from './poker'
+import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, wagerAmount, boardForHanna, HUMAN, selectedPairIds } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
@@ -66,6 +66,11 @@ export default function App() {
   useEffect(()=>{
     if(game.finished||game.turn!==1)return
     const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),650)
+    return()=>clearTimeout(timer)
+  },[game])
+  useEffect(()=>{
+    if(!game.pendingStreet||game.finished)return
+    const timer=setTimeout(()=>setGame(prev=>advanceStreet(prev)),1000)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
