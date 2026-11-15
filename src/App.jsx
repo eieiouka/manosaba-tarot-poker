@@ -43,9 +43,11 @@ export default function App() {
   const selectedAmount = wagerAmount(game,0,betMultiplier)
   const facingBet = callAmount > 0
   const isBet = !facingBet && betMultiplier !== 'call' && betMultiplier !== 'all'
+  const postflopCheck = game.street > 0 && !facingBet
   const rank = evaluateVisible([...cards.player,...cards.board.slice(0,game.street)])
   const stage=['プリフロップ','フロップ','リバー'][game.street]
   useEffect(()=>{setBetMultiplier('call')},[game.street])
+  useEffect(()=>{if(game.street>0&&facingBet&&betMultiplier==='third')setBetMultiplier('call')},[game.street,facingBet,betMultiplier])
   function playerAction(action){
     if(game.finished||game.turn!==0)return
     setGame(act(game,0,action,betMultiplier))
@@ -113,10 +115,10 @@ export default function App() {
           <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} />)}</div></div>
           <div className="bet-controls">
             <div className="hand-rank desktop-rank">{playerRank}</div>
-            <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:['call','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? (game.street===0?'call':facingBet?'コール':'check') : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
+            <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:facingBet?['call','half','pot','all']:['third','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : value === 'third' ? '1/3' : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
             <div className="primary-action-row">
             <button type="button" className={`call-button ${betMultiplier==='all' ? 'action-allin' : betMultiplier==='call' ? 'action-call' : 'action-raise'}`} disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':isBet?'ベット':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
-            <button type="button" className="game-secondary" disabled={game.finished||game.turn!==0} onClick={()=>playerAction('fold')}>フォールド</button>
+            <button type="button" className={`game-secondary ${postflopCheck ? 'action-check' : ''}`} disabled={game.finished||game.turn!==0} onClick={()=>playerAction(postflopCheck?'call':'fold')}>{postflopCheck?'チェック':'フォールド'}</button>
             </div>
 
           </div>
