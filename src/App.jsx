@@ -5,13 +5,12 @@ import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout,
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
   const ratio = chips / STARTING_CHIPS
-  if (ratio <= 0) return -4
-  if (ratio <= .25) return -3
-  if (ratio <= .5) return -2
-  if (ratio < 1) return -1
-  if (ratio >= 2) return 2
-  if (ratio > 1) return 1
-  return 0
+  if (ratio <= .25) return -1
+  if (ratio <= .5) return 0
+  if (ratio < 1) return 1
+  if (ratio >= 2) return 4
+  if (ratio > 1) return 3
+  return 1
 }
 function Card({ card, hidden = false, facingOpponent = false, paired = false, pairTone = 'player', humanSpecialTone = '', highTone = '', glowTone = '' }) {
   const src = hidden ? '/tarot/back.png' : `/tarot/${card.id}.png`
@@ -38,7 +37,7 @@ export default function App() {
   const hannaChips = game.stacks[1]
   // At showdown, Hanna reacts to the player's result; ties keep the usual expression.
   const mood = game.finished && game.showOpponent && game.winner !== -1
-    ? (game.winner === 0 ? -1 : 1)
+    ? (game.winner === 0 ? -2 : 2)
     : hannaMood(game.stacks[1] + game.committed[1])
   const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
