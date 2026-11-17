@@ -65,22 +65,22 @@ export default function App() {
   }
   useEffect(()=>{
     if(game.finished||game.turn!==1)return
-    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),1400)
+    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),1050)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
     if(!game.pendingStreet||game.finished)return
-    const timer=setTimeout(()=>setGame(prev=>advanceStreet(prev)),1000)
+    const timer=setTimeout(()=>setGame(prev=>advanceStreet(prev)),750)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
     if(!game.pendingShowdown||game.finished)return
-    const timer=setTimeout(()=>setGame(prev=>advanceShowdown(prev)),1200)
+    const timer=setTimeout(()=>setGame(prev=>advanceShowdown(prev)),900)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
     if(!game.runout||game.finished)return
-    const timer=setTimeout(()=>setGame(prev=>advanceRunout(prev)),850)
+    const timer=setTimeout(()=>setGame(prev=>advanceRunout(prev)),638)
     return()=>clearTimeout(timer)
   },[game])
   const hannaRank = game.showOpponent ? evaluate([...cards.opponent,...boardForHanna(cards.board)]).label : ''
