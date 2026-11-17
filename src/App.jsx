@@ -34,6 +34,7 @@ export default function App() {
   const mobile = viewport.width <= 650
   const fit = mobile ? 1 : Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
   const [game, setGame] = useState(() => newHand())
+  const [pairGuideCard, setPairGuideCard] = useState(null)
   const cards = game.cards
   const pairGuideMatches = pairGuideCard ? Array.from({length:22},(_,id)=>id).filter(id=>id!==pairGuideCard.id).flatMap(id=>(id===12||id===16?[true]:[false,true]).map(reversed=>({card:{id,reversed},value:pairValue(pairGuideCard,{id,reversed})})).filter(item=>item.value!==null)) : []
   const hannaChips = game.stacks[1]
@@ -45,7 +46,6 @@ export default function App() {
       ? (game.winner === 0 ? -2 : 2)
       : hannaMood(game.stacks[1] + game.committed[1])
   const [howToOpen, setHowToOpen] = useState(false)
-  const [pairGuideCard, setPairGuideCard] = useState(null)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
   const selectedAmount = wagerAmount(game,0,betMultiplier)
