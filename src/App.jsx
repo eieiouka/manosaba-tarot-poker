@@ -81,9 +81,9 @@ export default function App() {
         ? newHand(prev.stacks,prev.hand+1)
         : prev)
       setBetMultiplier('call')
-    },1500)
+    },game.showOpponent?2000:1500)
     return()=>clearTimeout(timer)
-  },[game.finished,game.hand])
+  },[game.finished,game.hand,game.showOpponent])
   useEffect(()=>{
     if(game.finished||game.turn!==1)return
     const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),1100)
