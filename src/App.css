@@ -1131,3 +1131,20 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  filter:none!important;
  box-shadow:0 0 0 1.5px #d5b0e1bb,0 0 12px 4px #e58f9b88,0 0 20px 7px #79c3e966!important;
 }
+
+/* Straights and three-card hands: glow all three selected cards.
+   Reuse the exact same intensity and pulse as the pair high card. */
+.card-slot.hand-glow-player img{
+ animation:pair-high-glow-player 2s ease-in-out infinite!important;
+ filter:none!important;
+ box-shadow:0 0 0 1.5px #e58f9bcc,0 0 11px 4px #e58f9b99!important;
+}
+.card-slot.hand-glow-hanna img{
+ animation:pair-high-glow-hanna 2s ease-in-out infinite!important;
+ filter:none!important;
+ box-shadow:0 0 0 1.5px #79c3e9cc,0 0 11px 4px #79c3e999!important;
+}
+.card-slot.hand-glow-both img{
+ filter:none!important;
+ box-shadow:0 0 0 1.5px #d5b0e1bb,0 0 12px 4px #e58f9b88,0 0 20px 7px #79c3e966!important;
+}
