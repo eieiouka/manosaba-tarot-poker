@@ -1075,3 +1075,15 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  pointer-events:none;
  z-index:5;
 }
+
+/* Slightly stronger highlight for the pair's comparison-value card. */
+.card-slot .card-number.high-number-player{background:#e58f9b!important}
+.card-slot .card-number.high-number-hanna{background:#79c3e9!important}
+.card-slot .card-number.high-number-both{
+ background:linear-gradient(180deg,#79c3e9 0%,#79c3e9 50%,#e58f9b 50%,#e58f9b 100%)!important;
+}
+.card-slot.high-card-player img{outline-color:#e58f9b}
+.card-slot.high-card-hanna img{outline-color:#79c3e9}
+.card-slot.high-card-both::after{
+ background:linear-gradient(180deg,#79c3e9 0%,#79c3e9 50%,#e58f9b 50%,#e58f9b 100%) border-box;
+}
