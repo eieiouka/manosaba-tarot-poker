@@ -35,10 +35,11 @@ export default function App() {
   const [game, setGame] = useState(() => newHand())
   const cards = game.cards
   const hannaChips = game.stacks[1]
-  // At showdown, Hanna reacts to the player's result; ties keep the usual expression.
+  // Show the result expression for folds as well as showdowns.
+  // A final game loss takes priority over the ordinary loss expression.
   const mood = game.finished && game.winner === 0 && game.stacks[1] === 0
     ? -4
-    : game.finished && game.showOpponent && game.winner !== -1
+    : game.finished && game.winner !== -1
       ? (game.winner === 0 ? -2 : 2)
       : hannaMood(game.stacks[1] + game.committed[1])
   const [imageMissing, setImageMissing] = useState(false)
