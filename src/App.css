@@ -1260,3 +1260,7 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  .pair-guide-done{margin:8px 10px 10px}
 }
 @media(max-width:350px){.pair-guide-grid{grid-template-columns:1fr}.pair-guide-art{width:52px;flex-basis:52px}}
+
+/* Long-press targets must retain the original card dimensions on both layouts. */
+.pair-guide-trigger{touch-action:pan-y;-webkit-touch-callout:none;user-select:none;-webkit-user-select:none;align-self:flex-start}
+.pair-guide-trigger img{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
