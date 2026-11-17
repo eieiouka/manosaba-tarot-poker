@@ -17,7 +17,7 @@ function Card({ card, hidden = false, facingOpponent = false, paired = false, pa
   const src = hidden ? '/tarot/back.png' : `/tarot/${card.id}.png`
   const description = hidden ? '裏向きのカード' : `${CARD_NAMES[card.id]}・${card.reversed ? '逆位置' : '正位置'}`
   return (
-    <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''}`} title={description}>
+    <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''} ${paired ? `paired-card paired-card-${pairTone}` : ''}`} title={description}>
       <img className={!hidden && card.reversed && card.id !== 12 && card.id !== 16 ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
       {!hidden && HUMAN.has(card.id) && <span className={`human-card-mark ${humanSpecialTone ? `human-special-${humanSpecialTone}` : ""}`} title="人間カード" aria-label="人間カード"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.5" r="4" fill="currentColor"/><path d="M3.5 21c.2-5.2 3.5-8 8.5-8s8.3 2.8 8.5 8H3.5Z" fill="currentColor"/></svg></span>}
       {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""} ${paired ? "paired-number" : ""} ${paired ? `paired-${pairTone}` : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
