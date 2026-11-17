@@ -1087,3 +1087,23 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
 .card-slot.high-card-both::after{
  background:linear-gradient(180deg,#79c3e9 0%,#79c3e9 50%,#e58f9b 50%,#e58f9b 100%) border-box;
 }
+
+/* Subtle glow only on the comparison-value (high) card of a pair. */
+.card-slot.high-card-player img{
+ filter:drop-shadow(0 0 5px #e58f9b99);
+}
+.card-slot.high-card-hanna img{
+ filter:drop-shadow(0 0 5px #79c3e999);
+}
+.card-slot.high-card-both img{
+ filter:drop-shadow(0 0 5px #e58f9b88) drop-shadow(0 0 4px #79c3e988);
+}
+.card-slot .card-number.high-number-player{
+ box-shadow:0 0 7px 2px #e58f9b88!important;
+}
+.card-slot .card-number.high-number-hanna{
+ box-shadow:0 0 7px 2px #79c3e988!important;
+}
+.card-slot .card-number.high-number-both{
+ box-shadow:0 0 7px 2px #e58f9b66,0 0 8px 3px #79c3e966!important;
+}
