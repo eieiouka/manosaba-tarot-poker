@@ -70,12 +70,12 @@ export default function App() {
   },[game])
   useEffect(()=>{
     if(!game.pendingStreet||game.finished)return
-    const timer=setTimeout(()=>setGame(prev=>advanceStreet(prev)),375)
+    const timer=setTimeout(()=>setGame(prev=>advanceStreet(prev)),750)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
     if(!game.pendingShowdown||game.finished)return
-    const timer=setTimeout(()=>setGame(prev=>advanceShowdown(prev)),450)
+    const timer=setTimeout(()=>setGame(prev=>advanceShowdown(prev)),900)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
