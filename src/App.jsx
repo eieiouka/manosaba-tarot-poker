@@ -13,11 +13,11 @@ function hannaMood(chips) {
   if (ratio > 1) return 1
   return 0
 }
-function Card({ card, hidden = false, facingOpponent = false, paired = false, pairTone = 'player', humanSpecialTone = '', highTone = '' }) {
+function Card({ card, hidden = false, facingOpponent = false, paired = false, pairTone = 'player', humanSpecialTone = '', highTone = '', glowTone = '' }) {
   const src = hidden ? '/tarot/back.png' : `/tarot/${card.id}.png`
   const description = hidden ? '裏向きのカード' : `${CARD_NAMES[card.id]}・${card.reversed ? '逆位置' : '正位置'}`
   return (
-    <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''} ${paired ? `paired-card paired-card-${pairTone}` : ''} ${highTone ? `high-card-${highTone}` : ''}`} title={description}>
+    <div className={`card-slot ${facingOpponent ? 'facing-opponent' : ''} ${paired ? `paired-card paired-card-${pairTone}` : ''} ${highTone ? `high-card-${highTone}` : ''} ${glowTone ? `hand-glow-${glowTone}` : ''}`} title={description}>
       <img className={!hidden && card.reversed && card.id !== 12 && card.id !== 16 ? "card-image-reversed" : ""} src={src} alt={description} draggable="false" />
       {!hidden && HUMAN.has(card.id) && <span className={`human-card-mark ${humanSpecialTone ? `human-special-${humanSpecialTone}` : ""}`} title="人間カード" aria-label="人間カード"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.5" r="4" fill="currentColor"/><path d="M3.5 21c.2-5.2 3.5-8 8.5-8s8.3 2.8 8.5 8H3.5Z" fill="currentColor"/></svg></span>}
       {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""} ${paired ? "paired-number" : ""} ${paired ? `paired-${pairTone}` : ""} ${highTone ? `high-number-${highTone}` : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
@@ -55,6 +55,8 @@ export default function App() {
   const hannaHighIds=game.showOpponent
     ? selectedPairHighIds([...cards.opponent,...boardForHanna(cards.board)])
     : new Set()
+  const playerTripleGlow=rank.rank>=2
+  const hannaTripleGlow=game.showOpponent && evaluate([...cards.opponent,...boardForHanna(cards.board)]).rank>=2
   const humanSpecialIds=selectedHumanSpecialIds(visibleCards)
   const hannaHumanSpecialIds=game.showOpponent
     ? selectedHumanSpecialIds([...cards.opponent,...boardForHanna(cards.board)])
@@ -105,7 +107,7 @@ export default function App() {
           <div className="hanna-portrait">
             {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
           </div>
-          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} paired={hannaPairedIds.has(card.id)} pairTone="hanna" highTone={hannaHighIds.has(card.id)?"hanna":""} humanSpecialTone={hannaHumanSpecialIds.has(card.id)?"hanna":""} />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
+          <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} paired={hannaPairedIds.has(card.id)} pairTone="hanna" glowTone={hannaTripleGlow&&hannaPairedIds.has(card.id)?"hanna":""} highTone={hannaHighIds.has(card.id)?"hanna":""} humanSpecialTone={hannaHumanSpecialIds.has(card.id)?"hanna":""} />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
           <div className="opponent-info">
             <div className="opponent-name"><strong>遠野ハンナ</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{hannaChips.toLocaleString()}</strong></div>
@@ -122,7 +124,7 @@ export default function App() {
 
               <div className="community-hand">
                 
-                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} paired={pairedIds.has(card.id) || hannaPairedIds.has(card.id)} pairTone={game.showOpponent && pairedIds.has(card.id) && hannaPairedIds.has(card.id) ? "both" : game.showOpponent && hannaPairedIds.has(card.id) ? "hanna" : "player"} highTone={highIds.has(card.id)&&hannaHighIds.has(card.id)?"both":hannaHighIds.has(card.id)?"hanna":highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)&&hannaHumanSpecialIds.has(card.id)?"both":hannaHumanSpecialIds.has(card.id)?"hanna":humanSpecialIds.has(card.id)?"player":""} />)}</div>
+                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} paired={pairedIds.has(card.id) || hannaPairedIds.has(card.id)} pairTone={game.showOpponent && pairedIds.has(card.id) && hannaPairedIds.has(card.id) ? "both" : game.showOpponent && hannaPairedIds.has(card.id) ? "hanna" : "player"} glowTone={playerTripleGlow&&pairedIds.has(card.id)&&hannaTripleGlow&&hannaPairedIds.has(card.id)?"both":hannaTripleGlow&&hannaPairedIds.has(card.id)?"hanna":playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)&&hannaHighIds.has(card.id)?"both":hannaHighIds.has(card.id)?"hanna":highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)&&hannaHumanSpecialIds.has(card.id)?"both":hannaHumanSpecialIds.has(card.id)?"hanna":humanSpecialIds.has(card.id)?"player":""} />)}</div>
               </div>
             </div>
           </div>
@@ -136,7 +138,7 @@ export default function App() {
             <div className="opponent-name"><strong>あなた</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{game.stacks[0].toLocaleString()}</strong></div>
           </div>
-          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} paired={pairedIds.has(card.id)} highTone={highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)?"player":""} />)}</div></div>
+          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} paired={pairedIds.has(card.id)} glowTone={playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)?"player":""} />)}</div></div>
           <div className="bet-controls">
             <div className="hand-rank desktop-rank">{playerRank}</div>
             <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:facingBet?['call','half','pot','all']:['third','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : value === 'third' ? '1/3' : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
