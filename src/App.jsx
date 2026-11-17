@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import './App.css'
 import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, advanceShowdown, wagerAmount, boardForHanna, HUMAN, pairValue, selectedHandIds, selectedHumanSpecialIds, selectedPairHighIds } from './poker'
@@ -23,6 +23,24 @@ function Card({ card, hidden = false, facingOpponent = false, paired = false, pa
       {!hidden && <span className={`card-number ${card.reversed ? "number-bottom-right" : ""} ${paired ? "paired-number" : ""} ${paired ? `paired-${pairTone}` : ""} ${highTone ? `high-number-${highTone}` : ""}`}>{card.id === 6 || card.id === 9 ? <span className="underlined-number">{card.id}</span> : card.id}</span>}
     </div>
   )
+}
+function HoldToInspect({card,onInspect,children}) {
+  const timer = useRef(null)
+  const start = useRef(null)
+  const cancel = () => { if(timer.current!==null){clearTimeout(timer.current);timer.current=null} }
+  useEffect(()=>cancel,[])
+  return <button type="button" className="pair-guide-trigger" aria-label={`${card.id}・${CARD_NAMES[card.id]}を長押ししてペア一覧を表示`}
+    onPointerDown={e=>{
+      if(e.pointerType==='mouse'&&e.button!==0)return
+      cancel()
+      start.current={x:e.clientX,y:e.clientY}
+      timer.current=setTimeout(()=>{timer.current=null;onInspect(card)},550)
+    }}
+    onPointerMove={e=>{if(start.current&&Math.hypot(e.clientX-start.current.x,e.clientY-start.current.y)>12)cancel()}}
+    onPointerUp={cancel} onPointerCancel={cancel} onPointerLeave={cancel}
+    onContextMenu={e=>e.preventDefault()}
+    onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onInspect(card)}}}
+  >{children}</button>
 }
 export default function App() {
   const [viewport, setViewport] = useState(() => ({ width: window.innerWidth, height: window.innerHeight }))
@@ -191,7 +209,7 @@ export default function App() {
 
               <div className="community-hand">
                 
-                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <Card key={i} card={card} paired={pairedIds.has(card.id) || hannaPairedIds.has(card.id)} pairTone={game.showOpponent && pairedIds.has(card.id) && hannaPairedIds.has(card.id) ? "both" : game.showOpponent && hannaPairedIds.has(card.id) ? "hanna" : "player"} glowTone={playerTripleGlow&&pairedIds.has(card.id)&&hannaTripleGlow&&hannaPairedIds.has(card.id)?"both":hannaTripleGlow&&hannaPairedIds.has(card.id)?"hanna":playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)&&hannaHighIds.has(card.id)?"both":hannaHighIds.has(card.id)?"hanna":highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)&&hannaHumanSpecialIds.has(card.id)?"both":hannaHumanSpecialIds.has(card.id)?"hanna":humanSpecialIds.has(card.id)?"player":""} />)}</div>
+                <div className="card-row">{cards.board.slice(0,game.street).map((card, i) => <HoldToInspect key={i} card={card} onInspect={setPairGuideCard}><Card card={card} paired={pairedIds.has(card.id) || hannaPairedIds.has(card.id)} pairTone={game.showOpponent && pairedIds.has(card.id) && hannaPairedIds.has(card.id) ? "both" : game.showOpponent && hannaPairedIds.has(card.id) ? "hanna" : "player"} glowTone={playerTripleGlow&&pairedIds.has(card.id)&&hannaTripleGlow&&hannaPairedIds.has(card.id)?"both":hannaTripleGlow&&hannaPairedIds.has(card.id)?"hanna":playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)&&hannaHighIds.has(card.id)?"both":hannaHighIds.has(card.id)?"hanna":highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)&&hannaHumanSpecialIds.has(card.id)?"both":hannaHumanSpecialIds.has(card.id)?"hanna":humanSpecialIds.has(card.id)?"player":""} /></HoldToInspect>)}</div>
               </div>
             </div>
           </div>
@@ -205,7 +223,7 @@ export default function App() {
             <div className="opponent-name"><strong>あなた</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{game.stacks[0].toLocaleString()}</strong></div>
           </div>
-          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <button type="button" className="pair-guide-trigger" key={i} onClick={()=>setPairGuideCard(card)} aria-label={`${card.id}・${CARD_NAMES[card.id]}のペア一覧を表示`}><Card card={card} paired={pairedIds.has(card.id)} glowTone={playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)?"player":""} /></button>)}</div></div>
+          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <HoldToInspect key={i} card={card} onInspect={setPairGuideCard}><Card card={card} paired={pairedIds.has(card.id)} glowTone={playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)?"player":""} /></HoldToInspect>)}</div></div>
           <div className="bet-controls">
             <div className="hand-rank desktop-rank">{playerRank}</div>
             <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:facingBet?['call','half','pot','all']:['third','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : value === 'third' ? '1/3' : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
