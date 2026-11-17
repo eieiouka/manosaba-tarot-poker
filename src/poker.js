@@ -133,6 +133,18 @@ export function wagerAmount(s,who,multiplier='call'){
  const target=multiplier==='all'?s.contrib[who]+s.stacks[who]:multiplier==='third'?s.contrib[other]+Math.floor(s.pot/3):multiplier==='half'?s.contrib[other]+Math.floor(s.pot/2):multiplier==='pot'?s.contrib[other]+s.pot:Math.max(s.contrib[other]+s.bb,s.contrib[other]*Number(multiplier))
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
 }
+// Heads-up: an uncalled all-in excess is not part of the pot.
+// Return it to the larger contributor before any chips are collected.
+function refundUncalled(n){
+ const diff=n.committed[0]-n.committed[1]
+ if(diff===0)return
+ const who=diff>0?0:1,excess=Math.abs(diff)
+ n.stacks[who]+=excess
+ n.committed[who]-=excess
+ // Contributions from completed streets have already been collected;
+ // the unmatched amount belongs to the current street.
+ n.contrib[who]-=excess
+}
 export function settleShowdown(s){
  const n={...s,stacks:s.stacks.slice(),street:2,runout:false,pendingShowdown:false,showOpponent:true,finished:true,turn:-1,lastActions:['','']}
  n.pot+=n.contrib[0]+n.contrib[1];n.contrib=[0,0]
@@ -174,6 +186,7 @@ export function act(s,who,action,multiplier='call'){
  const matched=n.contrib[0]===n.contrib[1]||n.stacks[0]===0||n.stacks[1]===0
  if(action==='raise'&&amount>toCall){n.checks=0;n.turn=other;return n}
  if(!matched){n.turn=other;return n}
+ if(n.stacks.some(x=>x===0))refundUncalled(n)
  if(n.stacks.some(x=>x===0)&&!(action==='raise'&&amount>toCall)){
   // Keep wagers visible throughout the delay; collect on the first board reveal.
   n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
