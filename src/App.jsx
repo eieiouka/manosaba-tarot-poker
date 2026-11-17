@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './App.css'
 import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, advanceShowdown, wagerAmount, boardForHanna, HUMAN, selectedHandIds, selectedHumanSpecialIds, selectedPairHighIds } from './poker'
 
@@ -113,7 +114,7 @@ export default function App() {
         <div className="brand"><span className="brand-icon">✦</span><span>MANOSABA <strong>TAROT POKER</strong></span></div>
         <button type="button" className="mobile-header-how-to" onClick={() => setHowToOpen(true)}>How to play</button>
       </header>
-      {howToOpen && <div className="howto-overlay" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setHowToOpen(false)}}>
+      {howToOpen && createPortal(<div className="howto-overlay" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setHowToOpen(false)}}>
         <section className="howto-dialog" role="dialog" aria-modal="true" aria-labelledby="howto-title">
           <div className="howto-heading"><h2 id="howto-title">How to play</h2><button type="button" className="howto-close" onClick={()=>setHowToOpen(false)} aria-label="閉じる">×</button></div>
           <div className="howto-content">
@@ -145,7 +146,7 @@ export default function App() {
           </div>
           <button type="button" className="howto-done" onClick={()=>setHowToOpen(false)}>ゲームに戻る</button>
         </section>
-      </div>}
+      </div>, document.body)}
       <div className="game-area">
         <section className="opponent-zone" aria-label="対戦相手">
           <button type="button" className="how-to-play" onClick={() => setHowToOpen(true)}>How to play</button>
