@@ -80,7 +80,7 @@ export default function App() {
         ? newHand(prev.stacks,prev.hand+1)
         : prev)
       setBetMultiplier('call')
-    },3000)
+    },1500)
     return()=>clearTimeout(timer)
   },[game.finished,game.hand])
   useEffect(()=>{
