@@ -125,7 +125,7 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  const bb=blindFor(hand),sb=Math.floor(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
- return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,pendingStreet:false,pendingShowdown:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
+ return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,pendingStreet:false,pendingShowdown:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB'],actionCounts:[0,0]}
 }
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
@@ -172,10 +172,11 @@ export function advanceRunout(s){
 }
 export function act(s,who,action,multiplier='call'){
  if(s.finished||s.pendingStreet||s.pendingShowdown||s.turn!==who)return s
- const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])]}
+ const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])],actionCounts:[...(s.actionCounts||[0,0])]}
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
  // A big blind facing an unraised small-blind limp may check or raise, not fold.
  if(action==='fold'&&n.street===0&&who!==n.button&&toCall===0&&n.raises===0&&n.lastActions[n.button]==='コール')return s
+ n.actionCounts[who]++
  if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
  let amount=0
  if(action==='raise'){
