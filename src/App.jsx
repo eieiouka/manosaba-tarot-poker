@@ -35,7 +35,7 @@ export default function App() {
   const fit = mobile ? 1 : Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
   const [game, setGame] = useState(() => newHand())
   const cards = game.cards
-  const pairGuideMatches = pairGuideCard ? Array.from({length:22},(_,id)=>id).filter(id=>id!==pairGuideCard.id).flatMap(id=>[false,true].map(reversed=>({card:{id,reversed},value:pairValue(pairGuideCard,{id,reversed})})).filter(item=>item.value!==null)) : []
+  const pairGuideMatches = pairGuideCard ? Array.from({length:22},(_,id)=>id).filter(id=>id!==pairGuideCard.id).flatMap(id=>(id===12||id===16?[true]:[false,true]).map(reversed=>({card:{id,reversed},value:pairValue(pairGuideCard,{id,reversed})})).filter(item=>item.value!==null)) : []
   const hannaChips = game.stacks[1]
   // Show the result expression for folds as well as showdowns.
   // A final game loss takes priority over the ordinary loss expression.
