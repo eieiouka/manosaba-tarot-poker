@@ -42,7 +42,6 @@ export default function App() {
     : game.finished && game.winner !== -1
       ? (game.winner === 0 ? -2 : 2)
       : hannaMood(game.stacks[1] + game.committed[1])
-  const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
   const selectedAmount = wagerAmount(game,0,betMultiplier)
@@ -116,7 +115,7 @@ export default function App() {
         <section className="opponent-zone" aria-label="対戦相手">
           <button type="button" className="how-to-play" onClick={() => {}}>How to play</button>
           <div className="hanna-portrait">
-            {!imageMissing ? <img src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={() => setImageMissing(true)} onLoad={() => setImageMissing(false)} /> : <div className="image-placeholder">遠野ハンナ<br /><small>public/hanna/ に画像を配置</small></div>}
+            <img key={mood} src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={e=>{if(!e.currentTarget.src.endsWith("/hanna/hanna_1.png"))e.currentTarget.src="/hanna/hanna_1.png"}} />
           </div>
           <div className="hanna-hand-side"><div className="side-caption">HANNA'S HAND</div><div className="side-cards">{cards.opponent.map((card, i) => <Card key={i} card={card} hidden={!game.showOpponent} paired={hannaPairedIds.has(card.id)} pairTone="hanna" glowTone={hannaTripleGlow&&hannaPairedIds.has(card.id)?"hanna":""} highTone={hannaHighIds.has(card.id)?"hanna":""} humanSpecialTone={hannaHumanSpecialIds.has(card.id)?"hanna":""} />)}</div><div className={`hand-rank hanna-rank-mobile ${game.showOpponent ? "revealed" : ""}`}>{hannaRank}</div></div>
           <div className="opponent-info">
