@@ -17,7 +17,8 @@ export function pairValue(a,b){
  if(x===0&&((a.id===0&&upright(a)&&human(b)&&b.reversed)||(b.id===0&&upright(b)&&human(a)&&a.reversed)))return y
  if(both&&((a.id===1&&human(b))||(b.id===1&&human(a))))return 1
  if(both&&((a.id===11&&human(b))||(b.id===11&&human(a))))return a.id===11?b.id:a.id
- if(x===6&&y===9&&a.reversed!==b.reversed)return 9
+ // 6-9 pairs only with opposite orientations, including Hanna's flipped board.
+ if(x===6&&y===9)return a.reversed!==b.reversed?9:null
  if(PAIRS.some(p=>p[0]===x&&p[1]===y)){
    if((x===4&&y===12)||(x===12&&y===20)||(x===13&&y===16)||(x===15&&y===16))return upright(a.id===12||a.id===16?b:a)?y:null
    return both?y:null
