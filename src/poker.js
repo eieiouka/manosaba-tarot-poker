@@ -174,6 +174,8 @@ export function act(s,who,action,multiplier='call'){
  if(s.finished||s.pendingStreet||s.pendingShowdown||s.turn!==who)return s
  const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])]}
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
+ // A big blind facing an unraised small-blind limp may check or raise, not fold.
+ if(action==='fold'&&n.street===0&&who!==n.button&&toCall===0&&n.raises===0&&n.lastActions[n.button]==='コール')return s
  if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
  let amount=0
  if(action==='raise'){
