@@ -82,6 +82,29 @@ export function selectedHandIds(cards){
  }
  return new Set()
 }
+// Human attribute badges used specifically as a human-link condition
+// in the selected pair or three-card hand (not just any human card).
+export function selectedHumanSpecialIds(cards){
+ const selected=selectedHandIds(cards)
+ if(!selected.size)return new Set()
+ const chosen=cards.filter(c=>selected.has(c.id))
+ const marked=new Set()
+ for(let i=0;i<chosen.length;i++)for(let j=i+1;j<chosen.length;j++){
+  const a=effective(chosen[i]),b=effective(chosen[j])
+  if(pairValue(a,b)===null)continue
+  for(const [source,human] of [[a,b],[b,a]]){
+   if(!HUMAN.has(human.id))continue
+   const sourceUpright=upright(source),humanUpright=upright(human)
+   const link=(source.id===0&&sourceUpright&&!humanUpright)
+    ||(source.id===1&&sourceUpright&&humanUpright)
+    ||(source.id===11&&sourceUpright&&humanUpright)
+    ||([13,15].includes(source.id)&&sourceUpright&&!humanUpright)
+    ||(source.id===16&&!humanUpright)
+   if(link)marked.add(human.id)
+  }
+ }
+ return marked
+}
 export function drawCards(){
  const deck=Array.from({length:22},(_,id)=>id)
  for(let i=21;i>0;i--){const j=Math.floor(Math.random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]]}
