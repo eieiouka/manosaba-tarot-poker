@@ -176,14 +176,14 @@ export function act(s,who,action,multiplier='call'){
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
  // A big blind facing an unraised small-blind limp may check or raise, not fold.
  if(action==='fold'&&n.street===0&&who!==n.button&&toCall===0&&n.raises===0&&n.lastActions[n.button]==='コール')return s
- n.actionCounts[who]++
- if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
+ if(action==='fold'){n.actionCounts[who]++;n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
  let amount=0
  if(action==='raise'){
   amount=wagerAmount(n,who,multiplier)
   if(amount<=toCall&&n.stacks[who]>toCall)return s
   n.raises++
  }else amount=Math.min(toCall,n.stacks[who])
+ n.actionCounts[who]++
  n.lastActions[who]=action==='raise'?(multiplier==='all'||amount===s.stacks[who]?'オールイン':toCall===0?'ベット':'レイズ'):(toCall>0?'コール':'チェック')
  n.stacks[who]-=amount;n.contrib[who]+=amount;n.committed[who]+=amount
  const matched=n.contrib[0]===n.contrib[1]||n.stacks[0]===0||n.stacks[1]===0
