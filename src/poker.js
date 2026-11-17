@@ -82,6 +82,15 @@ export function selectedHandIds(cards){
  }
  return new Set()
 }
+// For a one-pair hand, the high card is the card whose ID equals
+// the pair's comparison value (which can be lower than the other ID).
+export function selectedPairHighIds(cards){
+ const result=evaluateVisible(cards)
+ if(result.rank!==1)return new Set()
+ const chosen=selectedPairIds(cards)
+ const value=result.tie[0]
+ return chosen.has(value)?new Set([value]):new Set()
+}
 // Human attribute badges used specifically as a human-link condition
 // in the selected pair or three-card hand (not just any human card).
 export function selectedHumanSpecialIds(cards){
