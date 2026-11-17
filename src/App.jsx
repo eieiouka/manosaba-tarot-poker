@@ -86,7 +86,7 @@ export default function App() {
   },[game.finished,game.hand])
   useEffect(()=>{
     if(game.finished||game.turn!==1)return
-    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),525)
+    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),1100)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
