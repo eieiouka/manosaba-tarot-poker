@@ -42,6 +42,7 @@ export default function App() {
     : game.finished && game.winner !== -1
       ? (game.winner === 0 ? -2 : 2)
       : hannaMood(game.stacks[1] + game.committed[1])
+  const [howToOpen, setHowToOpen] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
   const selectedAmount = wagerAmount(game,0,betMultiplier)
@@ -110,11 +111,44 @@ export default function App() {
     <main className={`casino ${mobile ? "mobile-casino" : ""}`} style={mobile ? { width: viewport.width, minHeight: viewport.height, height: "auto", transform: "translateX(-50%)" } : { width: 1040, height: 760, transform: `translateX(-50%) scale(${fit})` }}>
       <header className="topbar">
         <div className="brand"><span className="brand-icon">✦</span><span>MANOSABA <strong>TAROT POKER</strong></span></div>
-        <button type="button" className="mobile-header-how-to" onClick={() => {}}>How to play</button>
+        <button type="button" className="mobile-header-how-to" onClick={() => setHowToOpen(true)}>How to play</button>
       </header>
+      {howToOpen && <div className="howto-overlay" role="presentation" onMouseDown={e=>{if(e.target===e.currentTarget)setHowToOpen(false)}}>
+        <section className="howto-dialog" role="dialog" aria-modal="true" aria-labelledby="howto-title">
+          <div className="howto-heading"><h2 id="howto-title">How to play</h2><button type="button" className="howto-close" onClick={()=>setHowToOpen(false)} aria-label="閉じる">×</button></div>
+          <div className="howto-content">
+            <h3>ゲームの目的</h3>
+            <p>遠野ハンナと1対1で対戦するタロットポーカーです。役の強さで勝つか、相手をフォールドさせてPOTを獲得しましょう。相手のチップをすべて獲得すると勝利です。</p>
+            <h3>ハンドの流れ</h3>
+            <ol>
+              <li><strong>プリフロップ：</strong>お互いに手札2枚を受け取り、ベットします。</li>
+              <li><strong>フロップ：</strong>共通の場札が1枚公開され、再びベットします。</li>
+              <li><strong>リバー：</strong>2枚目の場札が公開され、最後のベットを行います。</li>
+              <li><strong>ショウダウン：</strong>残った双方の手札を公開し、手札2枚と場札2枚の計4枚から最も強い役を比較します。</li>
+            </ol>
+            <h3>役の強さ（強い順）</h3>
+            <ol>
+              <li><strong>スリーカード：</strong>3枚のすべての組み合わせがペアになる。</li>
+              <li><strong>ストレート：</strong>正位置の連続した数字3枚（例：5・6・7）。</li>
+              <li><strong>ワンペア：</strong>条件を満たす2枚の組み合わせ。ペアの数字で強さを比較します。</li>
+              <li><strong>ハイカード：</strong>上記の役がない場合。</li>
+            </ol>
+            <h3>タロット独自のペア</h3>
+            <p>数字が同じでなくても、カードの組み合わせと正位置・逆位置によってペアが成立します。例えば2・3・4・5は互いに正位置ならペア、6と9は正逆が異なるときだけペアです。</p>
+            <p>黄色い人型マークは「人間」属性。0・1・11・13・15・16などには、人間属性を条件とする特殊なペアがあります。12と16は常に逆位置として扱います。</p>
+            <p>共通の場札はハンナから見ると正逆が反対です（12・16を除く）。そのため、同じ場札でも成立する役が異なる場合があります。</p>
+            <h3>操作方法</h3>
+            <p><strong>チェック：</strong>追加チップなしで続行。<strong>コール：</strong>相手のベット額に合わせる。<strong>ベット／レイズ：</strong>チップを上乗せする。<strong>オールイン：</strong>残りのチップを賭ける。<strong>フォールド：</strong>そのハンドを降ります。</p>
+            <p>ボタン上段でベット額を選び、下段のアクションボタンで確定します。相手が出せないオールインの超過分は返還されます。</p>
+            <h3>ブラインドと表示</h3>
+            <p>最初のBBは32、SBは16。10ハンドごとにブラインドが1.5倍になります。役に使われるカードは赤色、自分の相手であるハンナの役はショウダウン時に水色で表示されます。</p>
+          </div>
+          <button type="button" className="howto-done" onClick={()=>setHowToOpen(false)}>ゲームに戻る</button>
+        </section>
+      </div>}
       <div className="game-area">
         <section className="opponent-zone" aria-label="対戦相手">
-          <button type="button" className="how-to-play" onClick={() => {}}>How to play</button>
+          <button type="button" className="how-to-play" onClick={() => setHowToOpen(true)}>How to play</button>
           <div className="hanna-portrait">
             <img key={mood} src={`/hanna/hanna_${mood}.png`} alt="遠野ハンナ" onError={e=>{if(!e.currentTarget.src.endsWith("/hanna/hanna_1.png"))e.currentTarget.src="/hanna/hanna_1.png"}} />
           </div>
