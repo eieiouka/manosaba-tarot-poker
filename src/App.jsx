@@ -36,9 +36,11 @@ export default function App() {
   const cards = game.cards
   const hannaChips = game.stacks[1]
   // At showdown, Hanna reacts to the player's result; ties keep the usual expression.
-  const mood = game.finished && game.showOpponent && game.winner !== -1
-    ? (game.winner === 0 ? -2 : 2)
-    : hannaMood(game.stacks[1] + game.committed[1])
+  const mood = game.finished && game.winner === 0 && game.stacks[1] === 0
+    ? -4
+    : game.finished && game.showOpponent && game.winner !== -1
+      ? (game.winner === 0 ? -2 : 2)
+      : hannaMood(game.stacks[1] + game.committed[1])
   const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
