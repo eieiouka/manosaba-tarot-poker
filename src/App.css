@@ -1201,3 +1201,62 @@ html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}
  .howto-content{font-size:13px;padding:5px 16px 12px}
  .howto-done{margin:8px 14px 13px}
 }
+
+/* Hand-card pair encyclopedia: compact and scrollable on small phones. */
+.pair-guide-trigger{
+ appearance:none;background:transparent;border:0;padding:0;margin:0;
+ display:block;cursor:pointer;color:inherit;flex:0 0 auto;
+}
+.pair-guide-trigger:focus-visible{outline:3px solid #f3d397;outline-offset:4px;border-radius:5px}
+.pair-guide-trigger>.card-slot{pointer-events:none}
+.pair-guide-overlay{
+ position:fixed;inset:0;z-index:10001;
+ display:flex;align-items:center;justify-content:center;
+ background:#070b12e0;padding:12px;
+}
+.pair-guide-dialog{
+ width:min(650px,100%);max-height:90dvh;
+ display:flex;flex-direction:column;overflow:hidden;
+ background:linear-gradient(160deg,#292638,#161a24);
+ border:1px solid #c5a26e;border-radius:13px;
+ color:#f3e9d5;box-shadow:0 22px 70px #000c;
+ font-family:"Yu Gothic",Meiryo,sans-serif;
+}
+.pair-guide-header{
+ display:flex;align-items:flex-start;justify-content:space-between;
+ padding:15px 18px 11px;border-bottom:1px solid #b49a6655;gap:10px;
+}
+.pair-guide-header h2{font-size:18px;line-height:1.4;margin:0;color:#f3d397}
+.pair-guide-header p{font-size:12px;margin:5px 0 0}
+.pair-guide-close{border:0;background:transparent;color:#fff;font-size:30px;cursor:pointer;line-height:1}
+.pair-guide-body{overflow-y:auto;overscroll-behavior:contain;padding:10px 16px;min-height:0}
+.pair-guide-note{font-size:12px;line-height:1.6;margin:3px 0 12px;color:#e1d3bb}
+.pair-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pair-guide-entry{
+ display:flex;align-items:center;gap:10px;min-width:0;
+ padding:9px;background:#ffffff0c;border:1px solid #d3b98655;border-radius:8px;
+}
+.pair-guide-art{width:66px;flex:0 0 66px;aspect-ratio:2/3;overflow:hidden;border-radius:3px}
+.pair-guide-art img{display:block;width:100%;height:100%;object-fit:fill}
+.pair-guide-art img.card-image-reversed{transform:rotate(180deg)}
+.pair-guide-details{display:flex;flex-direction:column;gap:5px;min-width:0;font-size:12px}
+.pair-guide-details strong{font-size:13px}
+.pair-guide-details b{color:#f3d397}
+.pair-guide-done{
+ margin:10px 16px 14px;padding:10px;border:1px solid #e2c48a;
+ border-radius:7px;background:#765935;color:#fff0d2;font-weight:700;cursor:pointer;
+}
+@media(max-width:650px){
+ .pair-guide-overlay{padding:8px}
+ .pair-guide-dialog{max-height:94dvh}
+ .pair-guide-header{padding:12px}
+ .pair-guide-header h2{font-size:15px}
+ .pair-guide-body{padding:8px}
+ .pair-guide-grid{gap:6px}
+ .pair-guide-entry{padding:5px;gap:5px}
+ .pair-guide-art{width:42px;flex-basis:42px}
+ .pair-guide-details{font-size:10px;gap:3px;overflow-wrap:anywhere}
+ .pair-guide-details strong{font-size:11px}
+ .pair-guide-done{margin:8px 10px 10px}
+}
+@media(max-width:350px){.pair-guide-grid{grid-template-columns:1fr}.pair-guide-art{width:52px;flex-basis:52px}}
