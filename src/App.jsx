@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import './App.css'
-import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, advanceShowdown, wagerAmount, boardForHanna, HUMAN, selectedHandIds, selectedHumanSpecialIds, selectedPairHighIds } from './poker'
+import { STARTING_CHIPS, newHand, act, evaluate, evaluateVisible, advanceRunout, advanceStreet, advanceShowdown, wagerAmount, boardForHanna, HUMAN, pairValue, selectedHandIds, selectedHumanSpecialIds, selectedPairHighIds } from './poker'
 
 const CARD_NAMES = ['愚者','魔術師','女教皇','女帝','皇帝','教皇','恋人','戦車','力','隠者','運命の輪','正義','吊るされた男','死神','節制','悪魔','塔','星','月','太陽','審判','世界']
 function hannaMood(chips) {
@@ -35,6 +35,7 @@ export default function App() {
   const fit = mobile ? 1 : Math.min(viewport.width / 1040, viewport.height / 760, 1.35)
   const [game, setGame] = useState(() => newHand())
   const cards = game.cards
+  const pairGuideMatches = pairGuideCard ? Array.from({length:22},(_,id)=>id).filter(id=>id!==pairGuideCard.id).flatMap(id=>[false,true].map(reversed=>({card:{id,reversed},value:pairValue(pairGuideCard,{id,reversed})})).filter(item=>item.value!==null)) : []
   const hannaChips = game.stacks[1]
   // Show the result expression for folds as well as showdowns.
   // A final game loss takes priority over the ordinary loss expression.
@@ -44,6 +45,7 @@ export default function App() {
       ? (game.winner === 0 ? -2 : 2)
       : hannaMood(game.stacks[1] + game.committed[1])
   const [howToOpen, setHowToOpen] = useState(false)
+  const [pairGuideCard, setPairGuideCard] = useState(null)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
   const selectedAmount = wagerAmount(game,0,betMultiplier)
@@ -147,6 +149,25 @@ export default function App() {
           <button type="button" className="howto-done" onClick={()=>setHowToOpen(false)}>ゲームに戻る</button>
         </section>
       </div>, document.body)}
+      {pairGuideCard && createPortal(<div className="pair-guide-overlay" onMouseDown={e=>{if(e.target===e.currentTarget)setPairGuideCard(null)}}>
+        <section className="pair-guide-dialog" role="dialog" aria-modal="true" aria-labelledby="pair-guide-title">
+          <header className="pair-guide-header">
+            <div><h2 id="pair-guide-title">{pairGuideCard.id}・{CARD_NAMES[pairGuideCard.id]} のペア図鑑</h2><p>選択した手札：{pairGuideCard.reversed?'逆位置':'正位置'} ／ 成立する全組み合わせ</p></div>
+            <button type="button" className="pair-guide-close" onClick={()=>setPairGuideCard(null)} aria-label="閉じる">×</button>
+          </header>
+          <div className="pair-guide-body">
+            <p className="pair-guide-note">相手カードの正位置・逆位置ごとに表示しています。まだ場に出ていないカードも含む図鑑です。</p>
+            {pairGuideMatches.length===0?<p>この向きで成立するペアはありません。</p>:<div className="pair-guide-grid">
+              {pairGuideMatches.map(({card,value})=><div className="pair-guide-entry" key={`${card.id}-${card.reversed}`}>
+                <div className="pair-guide-art"><img src={`/tarot/${card.id}.png`} className={card.reversed&&card.id!==12&&card.id!==16?'card-image-reversed':''} alt={CARD_NAMES[card.id]}/></div>
+                <div className="pair-guide-details"><strong>{card.id}・{CARD_NAMES[card.id]}</strong><span>{card.reversed?'逆位置':'正位置'}{card.id===12||card.id===16?'（固定）':''}</span><b>ワンペア {value}</b></div>
+              </div>)}
+            </div>}
+            <p className="pair-guide-note">※ 12・16は常に逆位置として判定します。場札はハンナ視点では正逆が反転します。</p>
+          </div>
+          <button type="button" className="pair-guide-done" onClick={()=>setPairGuideCard(null)}>ゲームに戻る</button>
+        </section>
+      </div>,document.body)}
       <div className="game-area">
         <section className="opponent-zone" aria-label="対戦相手">
           <button type="button" className="how-to-play" onClick={() => setHowToOpen(true)}>How to play</button>
@@ -184,7 +205,7 @@ export default function App() {
             <div className="opponent-name"><strong>あなた</strong></div>
             <div className="chip-display"><span>CHIPS</span><strong>{game.stacks[0].toLocaleString()}</strong></div>
           </div>
-          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <Card key={i} card={card} paired={pairedIds.has(card.id)} glowTone={playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)?"player":""} />)}</div></div>
+          <div className="player-hand-wrap"><div className="hand-rank mobile-rank">{playerRank}</div><div className="player-hand">{cards.player.map((card,i) => <button type="button" className="pair-guide-trigger" key={i} onClick={()=>setPairGuideCard(card)} aria-label={`${card.id}・${CARD_NAMES[card.id]}のペア一覧を表示`}><Card card={card} paired={pairedIds.has(card.id)} glowTone={playerTripleGlow&&pairedIds.has(card.id)?"player":""} highTone={highIds.has(card.id)?"player":""} humanSpecialTone={humanSpecialIds.has(card.id)?"player":""} /></button>)}</div></div>
           <div className="bet-controls">
             <div className="hand-rank desktop-rank">{playerRank}</div>
             <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:facingBet?['call','half','pot','all']:['third','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : value === 'third' ? '1/3' : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
