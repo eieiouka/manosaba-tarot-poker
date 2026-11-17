@@ -48,6 +48,7 @@ export default function App() {
   const facingBet = callAmount > 0
   const isBet = !facingBet && betMultiplier !== 'call' && betMultiplier !== 'all'
   const postflopCheck = game.street > 0 && !facingBet
+  const bbFacingLimp = game.street === 0 && game.button === 1 && game.turn === 0 && !facingBet && game.raises === 0 && game.lastActions?.[1] === 'コール'
   const rank = evaluateVisible([...cards.player,...cards.board.slice(0,game.street)])
   // Highlight only the pair adopted as strongest, not every valid pair.
   const visibleCards=[...cards.player,...cards.board.slice(0,game.street)]
@@ -154,7 +155,7 @@ export default function App() {
             <div className="bet-multipliers">{(game.street===0?['call',2,3,'all']:facingBet?['call','half','pot','all']:['third','half','pot','all']).map(value => <button type="button" key={value} className={betMultiplier === value ? 'chosen' : ''} onClick={() => setBetMultiplier(value)}>{value === 'all' ? 'AI' : value === 'call' ? 'call' : value === 'third' ? '1/3' : value === 'half' ? '1/2' : value === 'pot' ? 'POT' : 'x' + value}</button>)}</div>
             <div className="primary-action-row">
             <button type="button" className={`call-button ${betMultiplier==='all' ? 'action-allin' : betMultiplier==='call' ? 'action-call' : 'action-raise'}`} disabled={game.finished||game.turn!==0} onClick={() => playerAction(betMultiplier==='call'?'call':'raise')}><strong>{betMultiplier==='call'?(callAmount?'コール':'チェック'):betMultiplier==='all'?'オールイン':isBet?'ベット':'レイズ'}</strong><span>{selectedAmount.toLocaleString()}</span></button>
-            <button type="button" className={`game-secondary ${postflopCheck ? 'action-check' : ''}`} disabled={game.finished||game.turn!==0} onClick={()=>playerAction(postflopCheck?'call':'fold')}>{postflopCheck?'チェック':'フォールド'}</button>
+            <button type="button" className={`game-secondary ${postflopCheck ? 'action-check' : ''}`} disabled={game.finished||game.turn!==0||bbFacingLimp} onClick={()=>playerAction(postflopCheck?'call':'fold')}>{postflopCheck?'チェック':'フォールド'}</button>
             </div>
 
           </div>
