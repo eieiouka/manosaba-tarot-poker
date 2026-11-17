@@ -65,7 +65,7 @@ export default function App() {
   }
   useEffect(()=>{
     if(game.finished||game.turn!==1)return
-    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),650)
+    const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),1400)
     return()=>clearTimeout(timer)
   },[game])
   useEffect(()=>{
