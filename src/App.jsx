@@ -39,7 +39,7 @@ export default function App() {
   // At showdown, Hanna reacts to the player's result; ties keep the usual expression.
   const mood = game.finished && game.showOpponent && game.winner !== -1
     ? (game.winner === 0 ? -1 : 1)
-    : hannaMood(hannaChips)
+    : hannaMood(game.stacks[1] + game.committed[1])
   const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
@@ -71,11 +71,17 @@ export default function App() {
     if(game.finished||game.turn!==0)return
     setGame(act(game,0,action,betMultiplier))
   }
-  function nextHand(){
+  // Keep the result visible before automatically starting the next hand.
+  useEffect(()=>{
     if(!game.finished)return
-    setGame(game.stacks.some(x=>x<=0)?newHand():newHand(game.stacks,game.hand+1))
-    setBetMultiplier('call')
-  }
+    const timer=setTimeout(()=>{
+      setGame(prev=>prev.finished
+        ? (prev.stacks.some(x=>x<=0)?newHand():newHand(prev.stacks,prev.hand+1))
+        : prev)
+      setBetMultiplier('call')
+    },3000)
+    return()=>clearTimeout(timer)
+  },[game.finished,game.hand])
   useEffect(()=>{
     if(game.finished||game.turn!==1)return
     const timer=setTimeout(()=>setGame(prev=>prev.finished||prev.turn!==1?prev:act(prev,1,'call')),525)
@@ -132,7 +138,7 @@ export default function App() {
             </div>
           </div>
         <div className="game-action-strip">
-            {game.finished && <button type="button" className="game-secondary next-hand-action" onClick={nextHand}>{game.stacks.some(x=>x<=0)?'最初から':'次のハンド'}</button>}
+
             
         </div>
         </section>
