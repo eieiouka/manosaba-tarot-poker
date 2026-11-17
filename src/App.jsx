@@ -90,7 +90,7 @@ export default function App() {
   },[game])
   useEffect(()=>{
     if(!game.runout||game.finished)return
-    const timer=setTimeout(()=>setGame(prev=>advanceRunout(prev)),319)
+    const timer=setTimeout(()=>setGame(prev=>advanceRunout(prev)),750)
     return()=>clearTimeout(timer)
   },[game])
   const hannaRank = game.showOpponent ? evaluate([...cards.opponent,...boardForHanna(cards.board)]).label : ''
