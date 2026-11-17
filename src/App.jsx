@@ -36,7 +36,10 @@ export default function App() {
   const [game, setGame] = useState(() => newHand())
   const cards = game.cards
   const hannaChips = game.stacks[1]
-  const mood = hannaMood(hannaChips)
+  // At showdown, Hanna reacts to the player's result; ties keep the usual expression.
+  const mood = game.finished && game.showOpponent && game.winner !== -1
+    ? (game.winner === 0 ? -1 : 1)
+    : hannaMood(hannaChips)
   const [imageMissing, setImageMissing] = useState(false)
   const [betMultiplier, setBetMultiplier] = useState('call')
   const callAmount = wagerAmount(game,0,'call')
