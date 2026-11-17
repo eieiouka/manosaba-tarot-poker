@@ -92,7 +92,7 @@ export function newHand(chips=[STARTING_CHIPS,STARTING_CHIPS],hand=1){
  const bb=blindFor(hand),sb=Math.floor(bb/2),button=(hand-1)%2
  const stacks=chips.slice(),contrib=[0,0],committed=[0,0]
  for(const [p,amount] of [[button,sb],[1-button,bb]]){const v=Math.min(stacks[p],amount);stacks[p]-=v;contrib[p]+=v;committed[p]+=v}
- return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,pendingStreet:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
+ return {cards:drawCards(),hand,button,bb,sb,stacks,contrib,committed,pot:0,street:0,turn:button,checks:0,raises:0,finished:false,winner:null,message:'プリフロップ',showOpponent:false,runout:false,pendingStreet:false,pendingShowdown:false,lastActions:[button===0?'SB':'BB',button===1?'SB':'BB']}
 }
 export function wagerAmount(s,who,multiplier='call'){
  const other=1-who,toCall=Math.max(0,s.contrib[other]-s.contrib[who])
@@ -101,7 +101,7 @@ export function wagerAmount(s,who,multiplier='call'){
  return Math.min(s.stacks[who],Math.max(toCall,target-s.contrib[who]))
 }
 export function settleShowdown(s){
- const n={...s,stacks:s.stacks.slice(),street:2,runout:false,showOpponent:true,finished:true,turn:-1,lastActions:['','']}
+ const n={...s,stacks:s.stacks.slice(),street:2,runout:false,pendingShowdown:false,showOpponent:true,finished:true,turn:-1,lastActions:['','']}
  n.pot+=n.contrib[0]+n.contrib[1];n.contrib=[0,0]
  const a=evaluate([...n.cards.player,...n.cards.board]),b=evaluate([...n.cards.opponent,...boardForHanna(n.cards.board)])
  const cmp=a.rank-b.rank||lex(a.tie,b.tie)
@@ -111,6 +111,10 @@ export function settleShowdown(s){
  n.message=cmp>0?'あなたの勝利！':cmp<0?'遠野ハンナの勝利':'引き分け'
  return n
 }
+export function advanceShowdown(s){
+ if(!s.pendingShowdown||s.finished)return s
+ return settleShowdown(s)
+}
 export function advanceStreet(s){
  if(!s.pendingStreet||s.finished)return s
  const street=s.street+1
@@ -119,10 +123,10 @@ export function advanceStreet(s){
 export function advanceRunout(s){
  if(!s.runout||s.finished)return s
  if(s.street<2)return {...s,street:s.street+1,pot:s.pot+s.contrib[0]+s.contrib[1],contrib:[0,0],lastActions:['',''],message:s.street===0?'フロップ公開':'リバー公開'}
- return settleShowdown(s)
+ return {...s,runout:false,pendingShowdown:true,turn:-1,message:'ショウダウン'}
 }
 export function act(s,who,action,multiplier='call'){
- if(s.finished||s.pendingStreet||s.turn!==who)return s
+ if(s.finished||s.pendingStreet||s.pendingShowdown||s.turn!==who)return s
  const n={...s,stacks:s.stacks.slice(),contrib:s.contrib.slice(),committed:s.committed.slice(),lastActions:[...(s.lastActions||['',''])]}
  const other=1-who,toCall=Math.max(0,n.contrib[other]-n.contrib[who])
  if(action==='fold'){n.lastActions[who]='フォールド';n.finished=true;n.winner=other;n.message=who===0?'フォールド：遠野ハンナの勝利':'遠野ハンナがフォールド';n.pot+=n.contrib[0]+n.contrib[1];n.stacks[other]+=n.pot;n.turn=-1;return n}
@@ -144,7 +148,7 @@ export function act(s,who,action,multiplier='call'){
  }
  n.checks++
  if(n.checks<2&&n.raises===0){n.turn=other;return n}
- if(n.street===2)return settleShowdown(n)
+ if(n.street===2){n.pendingShowdown=true;n.turn=-1;n.message='ショウダウン';return n}
  if(n.stacks.some(x=>x===0)){
   // Do not settle until every community card has been revealed.
   n.runout=true;n.turn=-1;n.message='オールイン：場札公開中'
