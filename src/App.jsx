@@ -73,10 +73,10 @@ export default function App() {
   }
   // Keep the result visible before automatically starting the next hand.
   useEffect(()=>{
-    if(!game.finished)return
+    if(!game.finished||game.stacks.some(x=>x<=0))return
     const timer=setTimeout(()=>{
-      setGame(prev=>prev.finished
-        ? (prev.stacks.some(x=>x<=0)?newHand():newHand(prev.stacks,prev.hand+1))
+      setGame(prev=>prev.finished&&prev.stacks.every(x=>x>0)
+        ? newHand(prev.stacks,prev.hand+1)
         : prev)
       setBetMultiplier('call')
     },3000)
